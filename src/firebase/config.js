@@ -2,14 +2,13 @@ import app from 'firebase/app'
 import firebase from 'firebase'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAXto37zaETstM3GY_gpBJpiSHIbpE-oJE",
-  authDomain: "fir-clase15.firebaseapp.com",
-  projectId: "fir-clase15",
-  storageBucket: "fir-clase15.appspot.com",
-  messagingSenderId: "448987115406",
-  appId: "1:448987115406:web:993b20da7322ccb2107edf"
+  apiKey: "AIzaSyDe9PKJCSABJ5qOp1JVjrMDcGTCY1fqa4Q",
+  authDomain: "integrador-p3.firebaseapp.com",
+  projectId: "integrador-p3",
+  storageBucket: "integrador-p3.appspot.com",
+  messagingSenderId: "46399141008",
+  appId: "1:46399141008:web:410914645914aeaffe5415"
 };
-
 
   app.initializeApp(firebaseConfig)
 

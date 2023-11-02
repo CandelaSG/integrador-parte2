@@ -14,19 +14,26 @@ class Register extends Component {
             textError: false
         }
     }
-
+   
     register (email, pass, userName , miniBio , profilePic){
         auth.createUserWithEmailAndPassword(email, pass)
             .then( response => {
-                //Cuando firebase responde sin error
-
-                console.log('Registrado ok', response);
-
-                 //Cambiar los estados a vacío como están al inicio.
+                db.collection("user").add({
+                    owner: this.state.email,
+                    createdAt: Date.now(),
+                    userName: this.state.userName,
+                    miniBio: this.state.miniBio,
+                    profilePic: this.state.profilePic
+                })
+            .then(console.log("success :)"))
+            .catch(error => console.log(error))
 
             })
             .catch( error => {
-                //Cuando Firebase responde con un error
+                this.setState({
+                    textError: error.message
+                })
+
                 console.log(error);
 
             })
@@ -83,11 +90,11 @@ class Register extends Component {
                     <Text style={styles.textButton} > Register</Text>    
                 </TouchableOpacity> : 
                 
-                <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: true})}>
+                <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: 'You must complete the required fields'})}>
                     <Text style={styles.textButton} > Register</Text>    
                 </TouchableOpacity> }
 
-                {this.state.textError == true ? <Text style={styles.textError}>You must complete the required fields </Text> : false }
+                {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false }
                 <TouchableOpacity onPress={ () => this.props.navigation.navigate('Login')}>
                    <Text> You already have an account? Login</Text>
                 </TouchableOpacity>

@@ -21,7 +21,7 @@ class Home extends Component {
 
   componentDidMount(){
     //Traer datos
-    db.collection('posts').where("owner", "==", "hola123456@dh.com").onSnapshot(
+    db.collection('posts').onSnapshot(
         posteos => {
             let postsAMostrar = [];
 

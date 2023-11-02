@@ -14,6 +14,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      textError: "",
     };
   }
 
@@ -38,7 +39,15 @@ class Login extends Component {
         this.props.navigation.navigate("Menu");
       })
       .catch((error) => {
-        //Cuando Firebase responde con un error.
+        if (error.code == 'auth/internal-error'){
+          this.setState({
+            textError: "Check your email or password"
+          })
+        }
+        else {
+        this.setState({
+          textError: error.message
+      })}
         console.log(error);
       });
   }
@@ -62,15 +71,21 @@ class Login extends Component {
           secureTextEntry={true}
           value={this.state.password}
         />
+        
+        {this.state.email.length > 1 && this.state.password.length > 1 ? 
+
         <TouchableOpacity
           style={styles.button}
-          onPress={() => this.login(this.state.email, this.state.password)}
-        >
+          onPress={() => this.login(this.state.email, this.state.password)}>
           <Text style={styles.textButton}>Login</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> :
+        <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: 'You must complete the required fields'})}>
+        <Text style={styles.textButton} > Login</Text>    
+        </TouchableOpacity> }  
+        {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false }
+
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Registro")}
-        >
+          onPress={() => this.props.navigation.navigate("Registro")}>
           <Text>You don't have an account? Register.</Text>
         </TouchableOpacity>
       </View>
@@ -104,9 +119,23 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "#28a745",
   },
+  buttonError:{
+    backgroundColor:'grey',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    textAlign: 'center',
+    borderRadius:4, 
+    borderWidth:1,
+    borderStyle: 'solid',
+    borderColor: 'white',
+    color: 'white'
+},
   textButton: {
     color: "#fff",
   },
+  textError:{
+    color:'red'
+}
 });
 
 export default Login;
