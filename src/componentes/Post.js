@@ -1,5 +1,5 @@
 import react, { Component } from 'react';
-import {TextInput, TouchableOpacity, View, Text, StyleSheet, FlatList} from 'react-native';
+import {TextInput, TouchableOpacity, View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import { auth, db } from '../firebase/config';
 import firebase from 'firebase';
 
@@ -52,10 +52,10 @@ class Post extends Component {
         return(
             <View style={styles.formContainer}>
                 <Text>----------------------------------------------------</Text>
-                <Text>Datos del Post</Text>
                 <Text>Email: {this.props.infoPost.datos.owner}</Text>
-                <Text>Texto: {this.props.infoPost.datos.post}</Text>
-                <Text>Cantidad de Likes: {this.props.infoPost.datos.likes.length}</Text>
+                <Image style={styles.camera} source={{uri:this.props.infoPost.datos.photo }}/>
+                <Text>Text: {this.props.infoPost.datos.post}</Text>
+                <Text>Likes: {this.props.infoPost.datos.likes.length}</Text>
 
                 {/* If ternario */}
                 {this.state.like ? 
@@ -79,6 +79,10 @@ const styles = StyleSheet.create({
     formContainer: {
       paddingHorizontal: 10,
       marginTop: 20,
+    },
+    camera: {
+        widht: '100%',
+        height: '100%',
     },
     input: {
       height: 20,

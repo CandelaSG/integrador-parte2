@@ -1,5 +1,6 @@
-import react, { Component } from "react";
+import React, { Component } from "react";
 import { auth } from "../../firebase/config";
+
 import {
   TextInput,
   TouchableOpacity,
@@ -55,7 +56,10 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.formContainer}>
-        <Text>Login</Text>
+       
+        <Text style={styles.title}> Login</Text>
+        
+        {/* EMAIL */}
         <TextInput
           style={styles.input}
           onChangeText={(text) => this.setState({ email: text })}
@@ -63,6 +67,8 @@ class Login extends Component {
           keyboardType="email-address"
           value={this.state.email}
         />
+
+        {/* PASSWORD */}
         <TextInput
           style={styles.input}
           onChangeText={(text) => this.setState({ password: text })}
@@ -85,7 +91,8 @@ class Login extends Component {
         {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false }
 
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Registro")}>
+          onPress={() => this.props.navigation.navigate("Registro")}
+          style={styles.register}>
           <Text>You don't have an account? Register.</Text>
         </TouchableOpacity>
       </View>
@@ -94,6 +101,9 @@ class Login extends Component {
 }
 
 const styles = StyleSheet.create({
+  title:{
+    fontWeight: 'bold'
+  },
   formContainer: {
     paddingHorizontal: 10,
     marginTop: 20,
@@ -120,6 +130,8 @@ const styles = StyleSheet.create({
     borderColor: "#28a745",
   },
   buttonError:{
+    flex:1,
+    alignItems: 'center',
     backgroundColor:'grey',
     paddingHorizontal: 10,
     paddingVertical: 6,
@@ -135,6 +147,9 @@ const styles = StyleSheet.create({
   },
   textError:{
     color:'red'
+},
+register:{
+  marginTop: 10
 }
 });
 

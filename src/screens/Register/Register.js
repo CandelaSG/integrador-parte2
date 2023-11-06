@@ -18,25 +18,23 @@ class Register extends Component {
     register (email, pass, userName , miniBio , profilePic){
         auth.createUserWithEmailAndPassword(email, pass)
             .then( response => {
+                console.log(response);
                 db.collection("user").add({
-                    owner: this.state.email,
+                    owner: email,
                     createdAt: Date.now(),
-                    userName: this.state.userName,
-                    miniBio: this.state.miniBio,
-                    profilePic: this.state.profilePic
+                    userName: userName,
+                    miniBio: miniBio,
+                    profilePic: profilePic
                 })
-            .then(console.log("success :)"))
-            .catch(error => console.log(error))
-
+                this.props.navigation.navigate("Login")
             })
-            .catch( error => {
+            .catch((error) => {
                 this.setState({
-                    textError: error.message
-                })
-
+                  textError: error.message
+              })
                 console.log(error);
+              });
 
-            })
     }
 
 
@@ -84,10 +82,13 @@ class Register extends Component {
 
                 {/* PROFILE PICTURE */}
                 
-                {this.state.email.length > 1 && this.state.password.length > 1 && this.state.userName.length > 1 ? 
+                {this.state.email.length > 1 && this.state.password.length >1 && this.state.userName.length > 1 ? 
 
-                <TouchableOpacity style={styles.button} onPress={()=>this.register(this.state.email, this.state.password, this.state.userName , this.state.miniBio , this.state.profilePic)}>
+                <TouchableOpacity style={styles.button} onPress={()=> 
+                this.register(this.state.email, this.state.password, this.state.userName , this.state.miniBio , this.state.profilePic)}>
+                    
                     <Text style={styles.textButton} > Register</Text>    
+                
                 </TouchableOpacity> : 
                 
                 <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: 'You must complete the required fields'})}>
@@ -132,6 +133,8 @@ const styles = StyleSheet.create({
         borderColor: '#28a745'
     },
     buttonError:{
+        flex:1,
+        alignItems: 'center',
         backgroundColor:'grey',
         paddingHorizontal: 10,
         paddingVertical: 6,

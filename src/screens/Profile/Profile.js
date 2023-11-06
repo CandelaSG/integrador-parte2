@@ -50,7 +50,6 @@ componentDidMount(){
     console.log(auth.currentUser.email);
     return (
        <View>
-        <Text>Profile</Text>
         <FlatList 
             data= {this.state.userInfo}
             keyExtractor={ i  => i.id }
