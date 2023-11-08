@@ -1,4 +1,4 @@
-import react, { Component } from 'react';
+import React, { Component } from 'react';
 import {TextInput, TouchableOpacity, View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import { auth, db } from '../firebase/config';
 import firebase from 'firebase';
@@ -52,7 +52,11 @@ class Post extends Component {
         return(
             <View style={styles.formContainer}>
                 <Text>----------------------------------------------------</Text>
-                <Text>Email: {this.props.infoPost.datos.owner}</Text>
+                <TouchableOpacity
+                    onPress={ ()=> this.props.navigation.navigate('ProfileUsers', this.props.infoPost.datos.owner)}>
+                    <Text>Email: {this.props.infoPost.datos.owner}</Text>
+                </TouchableOpacity>
+                {/* <Text>Email: {this.props.infoPost.datos.owner}</Text> */}
                 <Image style={styles.camera} source={{uri:this.props.infoPost.datos.photo }}/>
                 <Text>Text: {this.props.infoPost.datos.post}</Text>
                 <Text>Likes: {this.props.infoPost.datos.likes.length}</Text>
@@ -79,6 +83,7 @@ const styles = StyleSheet.create({
     formContainer: {
       paddingHorizontal: 10,
       marginTop: 20,
+      height: "100%"
     },
     camera: {
         widht: '100%',

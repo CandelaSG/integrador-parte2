@@ -6,6 +6,7 @@ import Register from "./src/screens/Register/Register";
 import Login from "./src/screens/Login/Login";
 import Home from "./src/screens/Home/Home";
 import Menu from "./src/componentes/Menu";
+import ProfileUsers from "./src/screens/ProfileUsers/ProfileUsers";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,12 @@ export default function App() {
           component={Menu}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+            name="ProfileUsers"
+            component={ProfileUsers}
+            options={{ headerShown: false }}
+        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

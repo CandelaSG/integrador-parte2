@@ -16,6 +16,8 @@ import {
 import Home from "../screens/Home/Home";
 import PostForm from "../screens/PostForm/PostForm";
 import Profile from "../screens/Profile/Profile";
+import ProfileUsers from "../screens/ProfileUsers/ProfileUsers";
+import StackProfileUsers from "./StackProfileUsers";
 
 const Tab = createBottomTabNavigator()
 
@@ -42,6 +44,10 @@ class Menu extends Component {
               {tabBarIcon: () => <Ionicons name="person" size={24} color="black" />
             }
               }/>
+            {/* <Tab.Screen name="StackProfileUsers" component={StackProfileUsers} options={
+              {tabBarIcon: () => <Ionicons name="person" size={24} color="black" />
+            }
+              }/> */}
         </Tab.Navigator>
     );
   }

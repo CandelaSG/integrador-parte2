@@ -1,4 +1,4 @@
-import react, { Component } from "react";
+import React, { Component } from "react";
 import {
   TextInput,
   TouchableOpacity,
@@ -57,7 +57,7 @@ class Home extends Component {
                     <FlatList 
                         data= {this.state.listaPost}
                         keyExtractor={ unPost => unPost.id }
-                        renderItem={ ({item}) => <Post infoPost = { item } /> }
+                        renderItem={ ({item}) => <Post infoPost = { item } navigation={this.props.navigation} /> }
                     />
                 }
 
