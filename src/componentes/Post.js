@@ -14,7 +14,6 @@ class Post extends Component {
     }
 
     componentDidMount(){
-        //Indicar si el post ya está likeado o no
         let likes = this.props.infoPost.datos.likes
 
         if(likes.length === 0){
@@ -31,7 +30,6 @@ class Post extends Component {
 
 
    likear(){
-    //El post tendría que guardar una propiedad like con un array de los usuario que lo likearon.
     db.collection("posts").doc(this.props.infoPost.id).update({
         likes: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email)
     })
@@ -39,7 +37,6 @@ class Post extends Component {
    }
 
    dislike(){
-    //Quitar del array de likes al usario que está mirando el post.
     db.collection("posts").doc(this.props.infoPost.id).update({
         likes: firebase.firestore.FieldValue.arrayRemove(auth.currentUser.email)
     })
@@ -48,18 +45,23 @@ class Post extends Component {
    
 
     render(){
-        // console.log(this.props);
+        console.log(this.props.infoPost.datos);
         return(
             <View style={styles.formContainer}>
-                <Text>----------------------------------------------------</Text>
                 <TouchableOpacity
                     onPress={ ()=> this.props.navigation.navigate('ProfileUsers', this.props.infoPost.datos.owner)}>
-                    <Text>Email: {this.props.infoPost.datos.owner}</Text>
+                    <Text style={styles.userName}>{this.props.infoPost.datos.owner}</Text>
                 </TouchableOpacity>
                 {/* <Text>Email: {this.props.infoPost.datos.owner}</Text> */}
                 <Image style={styles.camera} source={{uri:this.props.infoPost.datos.photo }}/>
-                <Text>Text: {this.props.infoPost.datos.post}</Text>
-                <Text>Likes: {this.props.infoPost.datos.likes.length}</Text>
+                {this.props.infoPost.datos.likes.length== 1? 
+                  <Text style={styles.texto}>{this.props.infoPost.datos.likes.length} like</Text>
+                  :
+                  <Text style={styles.texto} >{this.props.infoPost.datos.likes.length} likes</Text>
+                }
+                
+                <Text style={styles.texto}>{this.props.infoPost.datos.owner} {this.props.infoPost.datos.post}</Text>
+                
 
                 {/* If ternario */}
                 {this.state.like ? 
@@ -73,7 +75,6 @@ class Post extends Component {
                 </TouchableOpacity>
                 }
                 
-                
             </View>
         )
     }
@@ -81,27 +82,34 @@ class Post extends Component {
 
 const styles = StyleSheet.create({
     formContainer: {
-      paddingHorizontal: 10,
-      marginTop: 20,
-      height: "100%"
+      marginTop: 5,
+      height: 400
+      
+    },
+    texto:{
+        paddingLeft:10,
+    },
+    userName:{
+        paddingTop:10,
+        paddingLeft:10,
     },
     camera: {
-        widht: '100%',
-        height: '100%',
+        width: "100vw",
+        height: '70%',
+        marginTop: 10,
+        marginBottom:10
     },
     input: {
       height: 20,
-      paddingVertical: 15,
-      paddingHorizontal: 10,
       borderWidth: 1,
       borderColor: "#ccc",
       borderStyle: "solid",
       borderRadius: 6,
-      marginVertical: 10,
     },
     button: {
       backgroundColor: "salmon",
       paddingHorizontal: 10,
+      marginLeft:10,
       paddingVertical: 6,
       textAlign: "center",
       borderRadius: 4,

@@ -32,7 +32,7 @@ export default function App() {
         <Stack.Screen
             name="ProfileUsers"
             component={ProfileUsers}
-            options={{ headerShown: false }}
+            options={{ headerShown: true }}
         />
         
       </Stack.Navigator>
@@ -42,9 +42,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "flex-start",
+
   },
 });

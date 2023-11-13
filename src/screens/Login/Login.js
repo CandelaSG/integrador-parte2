@@ -63,7 +63,7 @@ class Login extends Component {
         <TextInput
           style={styles.input}
           onChangeText={(text) => this.setState({ email: text })}
-          placeholder="email"
+          placeholder="example@email.com"
           keyboardType="email-address"
           value={this.state.email}
         />
@@ -72,13 +72,13 @@ class Login extends Component {
         <TextInput
           style={styles.input}
           onChangeText={(text) => this.setState({ password: text })}
-          placeholder="password"
+          placeholder="Password"
           keyboardType="default"
           secureTextEntry={true}
           value={this.state.password}
         />
         
-        {this.state.email.length > 1 && this.state.password.length > 1 ? 
+        {this.state.email.length > 0 && this.state.password.length > 0 ? 
 
         <TouchableOpacity
           style={styles.button}

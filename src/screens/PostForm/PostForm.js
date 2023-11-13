@@ -30,6 +30,7 @@ class PostForm extends Component {
         post: this.state.post,
         photo: this.state.url,
         likes: [],
+        comments:[],
         createdAt: Date.now()
     })
     .then( console.log("Posteaste correctamente"))
@@ -41,7 +42,7 @@ class PostForm extends Component {
   }
 
   render() {
-    console.log(this.state.users);
+    console.log(auth.currentUser);
     return (
       <View style={styles.container}>
 
@@ -59,9 +60,13 @@ class PostForm extends Component {
         />
         <TouchableOpacity
           style={styles.button}
-          onPress={() => this.postear()}
+          onPress={() => {
+            this.postear()
+            this.props.navigation.navigate('Home')
+          
+          }}
         >
-          <Text style={styles.textButton}>Postear</Text>
+          <Text style={styles.textButton} >Postear</Text>
         </TouchableOpacity>
 
         </React.Fragment>

@@ -22,7 +22,7 @@ class ProfileUsers extends Component {
     };
   }
 componentDidMount(){
-    //Traer datos
+
     db.collection('user').where('owner','==', this.props.route.params).onSnapshot(
        data => {
            let info = []
@@ -54,11 +54,14 @@ componentDidMount(){
             this.setState({
                 userPosts: info
             })
+            ;
       }
     )
 }
 
   render() {
+    console.log(this.state);
+    console.log(this.props.route.params);
     return (
        <View>
         {<FlatList 
@@ -67,12 +70,12 @@ componentDidMount(){
             renderItem={ ({item}) => 
             {
               return (
-              <React.Fragment>
+              <View style={styles.containerDatos}>
                 <Text> { item.datos.userName } </Text>
                 <Text> { item.datos.owner } </Text>
-                <Text> { item.datos.miniBio } </Text>
-
-              </React.Fragment>
+                {item.datos.miniBio.length > 0 ? <Text> { item.datos.miniBio } </Text> : false}
+                <Text> { this.state.userPosts.length } posts</Text>
+              </View>
               )
             } 
            }
@@ -83,11 +86,16 @@ componentDidMount(){
             renderItem={ ({item}) => 
             {
               return (
-              <React.Fragment>
-                {/* <Image style={styles.camera} source={{uri:this.props.infoPost.datos.photo }}/> */}
-                <Text>Text: {item.datos.post}</Text>
-                <Text>Likes: {item.datos.likes.length}</Text>
-              </React.Fragment>
+              <View style={styles.containerPost}>
+                <Image style={styles.camera} source={{uri:item.datos.photo}}/>
+                <Text style={styles.textoPost}>{item.datos.post}</Text>
+                {item.datos.likes.length == 1? 
+                  <Text style={styles.textoPost}>{item.datos.likes.length} like</Text>
+                  :
+                  <Text style={styles.textoPost}>{item.datos.likes.length} likes</Text>
+                }
+                
+              </View>
               )
             } 
            }
@@ -98,5 +106,28 @@ componentDidMount(){
     );
   }
 }
+
+const styles = StyleSheet.create({
+  containerDatos:{
+    alignItems:'center',
+    height: '100%',
+    marginBottom:5,
+  },
+  containerPost: {
+    marginTop: 5,
+    marginBottom:5,
+    height: '70%'
+    
+  },
+  camera: {
+      width: "100vw",
+      height: '50vh',
+      marginTop: 10,
+      marginBottom:15
+  },
+  textoPost:{
+    marginLeft:5,
+  },
+});
 
 export default ProfileUsers;

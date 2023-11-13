@@ -1,21 +1,34 @@
-import react, { Component } from 'react';
+import React, { Component } from 'react';
 import { auth, db } from '../../firebase/config';
 import {TextInput, TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+
+import MyCamera from '../../componentes/MyCamera'
 
 class Register extends Component {
     constructor(){
         super()
         this.state={
+            showCamera:false,
             email:'',
             userName:'',
             password:'',
             miniBio:'',
             profilePic: '',
-            textError: false
+            textError: false,
+            url: ''
         }
     }
-   
+    
     register (email, pass, userName , miniBio , profilePic){
+        /* ERRORES */
+        if(this.state.email == '' || this.state.email.includes("@") == false){
+            return this.setState({textError: "You must enter a valid email address"})
+        }else if (this.state.password == '' || this.state.password.length <6){
+            return this.setState({textError: "Your password must be at least 6 characters long"})
+        }else if (this.state.userName == '') {
+            return this.setState({textError:'You must complete the username'})
+        }
+
         auth.createUserWithEmailAndPassword(email, pass)
             .then( response => {
                 console.log(response);
@@ -36,13 +49,24 @@ class Register extends Component {
               });
 
     }
-
+    
+    onImageUpload(url){
+        this.setState({ url: url , showCamera: false});
+      }
 
     render(){
+        console.log(this.state)
+        
         return(
-            <View style={styles.formContainer}>
-                <Text>Register</Text>
-                
+            
+            <View style={styles.container}>
+                {this.state.showCamera
+                ?
+                <MyCamera onImageUpload={(url) => this.onImageUpload(url)} />    
+            :
+            <>
+            <Text style={styles.title}>Register</Text>
+                <View style={styles.formContainer}>
                 {/* EMAIL */}
                 <TextInput
                     style={styles.input}
@@ -56,7 +80,7 @@ class Register extends Component {
                 <TextInput
                     style={styles.input}
                     onChangeText={(text)=>this.setState({userName: text})}
-                    placeholder='* User name'
+                    placeholder='* Username'
                     keyboardType='default'
                     value={this.state.userName}
                     />
@@ -81,8 +105,12 @@ class Register extends Component {
                     />
 
                 {/* PROFILE PICTURE */}
+
+                <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({showCamera: true})}>
+                    <Text style={styles.textButton} > Add profile picture</Text>    
+                </TouchableOpacity>
                 
-                {this.state.email.length > 1 && this.state.password.length >1 && this.state.userName.length > 1 ? 
+                {this.state.email.length > 0 && this.state.password.length >0 && this.state.userName.length > 0 ? 
 
                 <TouchableOpacity style={styles.button} onPress={()=> 
                 this.register(this.state.email, this.state.password, this.state.userName , this.state.miniBio , this.state.profilePic)}>
@@ -99,6 +127,10 @@ class Register extends Component {
                 <TouchableOpacity onPress={ () => this.props.navigation.navigate('Login')}>
                    <Text> You already have an account? Login</Text>
                 </TouchableOpacity>
+            </View>
+            </>
+            }
+                
                 
             </View>
         )
@@ -106,6 +138,9 @@ class Register extends Component {
 }
 
 const styles = StyleSheet.create({
+    title:{
+        fontWeight: 'bold'
+      },
     formContainer:{
         paddingHorizontal:10,
         marginTop: 20,

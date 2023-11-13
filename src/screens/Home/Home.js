@@ -21,7 +21,7 @@ class Home extends Component {
 
   componentDidMount(){
     //Traer datos
-    db.collection('posts').onSnapshot(
+    db.collection('posts').orderBy('createdAt' , 'desc').onSnapshot(
         posteos => {
             let postsAMostrar = [];
 
@@ -46,9 +46,6 @@ class Home extends Component {
     console.log(this.state.listaPost);
     return (
       <View style={styles.container}>
-        <Text>HOME</Text>
-
-        <Text>Lista de Posteos</Text>
                 {
                     this.state.listaPost.length === 0 
                     ?
@@ -69,7 +66,8 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100vh',
+    height: '100%',
+    backgroundColor: 'white'
   },
 });
 
