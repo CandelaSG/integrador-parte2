@@ -4,6 +4,7 @@ import {TextInput, TouchableOpacity, View, Text, StyleSheet} from 'react-native'
 
 import MyCamera from '../../componentes/MyCamera'
 
+
 class Register extends Component {
     constructor(){
         super()
@@ -15,7 +16,6 @@ class Register extends Component {
             miniBio:'',
             profilePic: '',
             textError: false,
-            url: ''
         }
     }
     
@@ -28,7 +28,7 @@ class Register extends Component {
         }else if (this.state.userName == '') {
             return this.setState({textError:'You must complete the username'})
         }
-
+        /* CREAR USUARIO */
         auth.createUserWithEmailAndPassword(email, pass)
             .then( response => {
                 console.log(response);
@@ -51,7 +51,7 @@ class Register extends Component {
     }
     
     onImageUpload(url){
-        this.setState({ url: url , showCamera: false});
+        this.setState({ profilePic: url , showCamera: false});
       }
 
     render(){
@@ -59,7 +59,7 @@ class Register extends Component {
         
         return(
             
-            <View style={styles.container}>
+            <>
                 {this.state.showCamera
                 ?
                 <MyCamera onImageUpload={(url) => this.onImageUpload(url)} />    
@@ -67,117 +67,110 @@ class Register extends Component {
             <>
             <Text style={styles.title}>Register</Text>
                 <View style={styles.formContainer}>
-                {/* EMAIL */}
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text)=>this.setState({email: text})}
-                    placeholder='* example@email.com'
-                    keyboardType='email-address'
-                    value={this.state.email}
-                    />
-                
-                {/* USER NAME */}
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text)=>this.setState({userName: text})}
-                    placeholder='* Username'
-                    keyboardType='default'
-                    value={this.state.userName}
-                    />
-                
-                {/* PASSWORD */}
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text)=>this.setState({password: text})}
-                    placeholder='* Password'
-                    keyboardType='default'
-                    secureTextEntry={true}
-                    value={this.state.password}
-                />
-
-                {/* MINI BIO */}
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(bio)=>this.setState({miniBio: bio})}
-                    placeholder='Tell us something about yourself'
-                    keyboardType='default'
-                    value={this.state.miniBio}
-                    />
-
-                {/* PROFILE PICTURE */}
-
-                <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({showCamera: true})}>
-                    <Text style={styles.textButton} > Add profile picture</Text>    
-                </TouchableOpacity>
-                
-                {this.state.email.length > 0 && this.state.password.length >0 && this.state.userName.length > 0 ? 
-
-                <TouchableOpacity style={styles.button} onPress={()=> 
-                this.register(this.state.email, this.state.password, this.state.userName , this.state.miniBio , this.state.profilePic)}>
+                    {/* EMAIL */}
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text)=>this.setState({email: text})}
+                        placeholder='* example@email.com'
+                        keyboardType='email-address'
+                        value={this.state.email}
+                        />
                     
-                    <Text style={styles.textButton} > Register</Text>    
-                
-                </TouchableOpacity> : 
-                
-                <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: 'You must complete the required fields'})}>
-                    <Text style={styles.textButton} > Register</Text>    
-                </TouchableOpacity> }
+                    {/* USER NAME */}
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text)=>this.setState({userName: text})}
+                        placeholder='* Username'
+                        keyboardType='default'
+                        value={this.state.userName}
+                        />
+                    
+                    {/* PASSWORD */}
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text)=>this.setState({password: text})}
+                        placeholder='* Password'
+                        keyboardType='default'
+                        secureTextEntry={true}
+                        value={this.state.password}
+                    />
 
-                {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false }
-                <TouchableOpacity onPress={ () => this.props.navigation.navigate('Login')}>
-                   <Text> You already have an account? Login</Text>
-                </TouchableOpacity>
-            </View>
+                    {/* MINI BIO */}
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(bio)=>this.setState({miniBio: bio})}
+                        placeholder='Tell us something about yourself'
+                        keyboardType='default'
+                        value={this.state.miniBio}
+                        />
+
+                    {/* PROFILE PICTURE */}
+
+                    <TouchableOpacity style={styles.buttonPhoto} onPress={()=> this.setState({showCamera: true})}>
+                        <Text> Add profile picture</Text>    
+                    </TouchableOpacity>
+                    
+                    {this.state.email.length > 0 && this.state.password.length >0 && this.state.userName.length > 0 ? 
+
+                    <TouchableOpacity style={styles.button} onPress={()=> 
+                    this.register(this.state.email, this.state.password, this.state.userName , this.state.miniBio , this.state.profilePic)}>
+                        
+                        <Text style={styles.textButton} > Register</Text>    
+                    
+                    </TouchableOpacity> : 
+                    
+                    <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: 'You must complete the required fields'})}>
+                        <Text style={styles.textButton} > Register</Text>    
+                    </TouchableOpacity> }
+
+                    {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false }
+                    <TouchableOpacity onPress={ () => this.props.navigation.navigate('Login')}>
+                    <Text style={styles.register}> You already have an account? Login</Text>
+                    </TouchableOpacity>
+                </View>
             </>
             }
                 
                 
-            </View>
+            </>
         )
     }
 }
 
 const styles = StyleSheet.create({
     title:{
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: '#896a92',
+        marginTop:10,
       },
     formContainer:{
         paddingHorizontal:10,
         marginTop: 20,
     },
     input:{
-        height:20,
-        paddingVertical:15,
+        backgroundColor:'#eae0ed',
+        height: 20,
+        paddingVertical: 15,
         paddingHorizontal: 10,
-        borderWidth:1,
-        borderColor: '#ccc',
-        borderStyle: 'solid',
         borderRadius: 6,
-        marginVertical:10,
+        marginVertical: 10,
     },
     button:{
         flex:1,
         alignItems: 'center',
-        backgroundColor:'#28a745',
+        backgroundColor: '#6c4e75',
         paddingHorizontal: 10,
         paddingVertical: 6,
-        textAlign: 'center',
-        borderRadius:4, 
-        borderWidth:1,
-        borderStyle: 'solid',
-        borderColor: '#28a745'
+        borderRadius: 4,
     },
     buttonError:{
         flex:1,
         alignItems: 'center',
-        backgroundColor:'grey',
+        backgroundColor:'#896a92',
         paddingHorizontal: 10,
         paddingVertical: 6,
         textAlign: 'center',
         borderRadius:4, 
-        borderWidth:1,
-        borderStyle: 'solid',
-        borderColor: 'white',
         color: 'white'
     },
     textButton:{
@@ -185,7 +178,20 @@ const styles = StyleSheet.create({
     },
     textError:{
         color:'red'
-    }
+    },
+    register:{
+        marginTop: 10
+      },
+      buttonPhoto:{
+        flex:1,
+        alignItems: 'center',
+        backgroundColor:'#C1C1C1',
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        textAlign: 'center',
+        borderRadius:4, 
+        marginBottom: 10,
+      }
 
 })
 

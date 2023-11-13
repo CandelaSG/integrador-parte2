@@ -18,15 +18,13 @@ class Search extends Component {
     super();
     this.state = { 
       search:'',
-      resultsUserName:[],
-      resultsEmail:[],
       results:[],
       hayResultados: false,
-      allUsers:[]
+      allUsers:[],
     };
   }
     componentDidMount(){
-        if (this.state.resultsUserName.length == 0 && this.state.resultsEmail.length == 0) {
+        if (this.state.results.length == 0 ) {
             this.setState({
                 hayResultados: false
             })
@@ -53,91 +51,91 @@ class Search extends Component {
         
     }
 
-  search(event){
+    search(event){
 
-    this.setState({search: event.target.value})
-    /* BUSCO POR EMAIL */
-    db.collection('user').where('owner', '==', this.state.search)
-    .get()
-    .then(
-        resultOwner => {
-        let resultUsers = [];
+        this.setState({search: event.target.value})
+        /* BUSCO POR EMAIL */
+        db.collection('user').where('owner', '==', this.state.search)
+        .get()
+        .then(
+            resultOwner => {
+            let resultUsers = [];
 
-        resultOwner.forEach( owner => {
-            resultUsers.push(
-                {
-                    id: owner.id,
-                    datos: owner.data()
-                }
-            )
-        })
-
-        this.setState({
-            resultsEmail: resultUsers,
-            hayResultados:true
-        })
-    })
-    .catch(e=> console.log(e))
-
-    db.collection('user').where('userName', '==', this.state.search)
-    .get()
-    .then(resultUserName => {
-        let resultUsers = [];
-
-        resultUserName.forEach( userName => {
-            resultUsers.push(
-                {
-                    id: userName.id,
-                    datos: userName.data()
-                }
-            )
-        })
-
-        this.setState({
-            resultsUserName: resultUsers,
-            hayResultados:true
-        })
-    }) 
-    .catch(e=> console.log(e))
-  }
-
-  search2(event){
-    this.setState({search: event.target.value})
-    /* BUSCO POR EMAIL */
-    db.collection('user').where('owner', '==', this.state.search).get()
-    .then(resultOwner => {
-        /* BUSCO POR NOMBRE DE USUARIO */
-        db.collection('user').where('userName', '==', this.state.search).get()
-            .then(resultUserName => {
-                const resultUsers = [];
-                resultOwner.forEach(user => {
-                    resultUsers.push({
-                        id: user.id,
-                        datos: user.data()
-                    });
-                });
-                resultUserName.forEach(doc => {
-                    resultUsers.push({
-                        id: doc.id,
-                        datos: doc.data()
-                    });
-                });
-
-
-                this.setState({
-                    results: resultUsers,
-                    hayResultados:true
-                });
+            resultOwner.forEach( owner => {
+                resultUsers.push(
+                    {
+                        id: owner.id,
+                        datos: owner.data()
+                    }
+                )
             })
-            .catch(e => {
-                console.error(e);
-            });
-    })
-    .catch(e => {
-        console.error(e);
-    });
-   
-}
+
+            this.setState({
+                resultsEmail: resultUsers,
+                hayResultados:true
+            })
+        })
+        .catch(e=> console.log(e))
+
+        db.collection('user').where('userName', '==', this.state.search)
+        .get()
+        .then(resultUserName => {
+            let resultUsers = [];
+
+            resultUserName.forEach( userName => {
+                resultUsers.push(
+                    {
+                        id: userName.id,
+                        datos: userName.data()
+                    }
+                )
+            })
+
+            this.setState({
+                resultsUserName: resultUsers,
+                hayResultados:true
+            })
+        }) 
+        .catch(e=> console.log(e))
+    }
+
+    search2(event){
+        this.setState({search: event.target.value})
+        /* BUSCO POR EMAIL */
+        db.collection('user').where('owner', '==', this.state.search).get()
+        .then(resultOwner => {
+            /* BUSCO POR NOMBRE DE USUARIO */
+            db.collection('user').where('userName', '==', this.state.search).get()
+                .then(resultUserName => {
+                    const resultUsers = [];
+                    resultOwner.forEach(user => {
+                        resultUsers.push({
+                            id: user.id,
+                            datos: user.data()
+                        });
+                    });
+                    resultUserName.forEach(doc => {
+                        resultUsers.push({
+                            id: doc.id,
+                            datos: doc.data()
+                        });
+                    });
+
+
+                    this.setState({
+                        results: resultUsers,
+                        hayResultados:true
+                    });
+                })
+                .catch(e => {
+                    console.error(e);
+                });
+        })
+        .catch(e => {
+            console.error(e);
+        });
+    
+    }
 
     filtro(event){ 
         this.setState({search: event.target.value});
@@ -155,12 +153,29 @@ class Search extends Component {
         })
 
     }
+    search3() {
+        db.collection("user").onSnapshot(
+            docs => {
+                let userResult = [];
+                docs.forEach(doc => {
+                console.log(doc);
+                    if (doc.userName.includes(this.state.search)) {
+                        userResult.push({
+                            id: doc.id,
+                            data: doc.data()
+                        })
+                    }
+                })
+                this.setState({ results: userResult })
+            }
+        )
+    }
 
   render() {
     console.log(auth.currentUser);
     console.log(this.state);
     return (
-        <View>
+        {/* <View>
 
             <TextInput
             placeholder='Search by username or email'
@@ -199,10 +214,8 @@ class Search extends Component {
             
             }
 
-        </View>
-      
-
-        
+        </View> */}
+    
     );
   }
 }

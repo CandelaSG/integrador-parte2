@@ -93,7 +93,7 @@ class Login extends Component {
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("Registro")}
           style={styles.register}>
-          <Text>You don't have an account? Register.</Text>
+          <Text>Don't have an account? Register.</Text>
         </TouchableOpacity>
       </View>
     );
@@ -102,44 +102,38 @@ class Login extends Component {
 
 const styles = StyleSheet.create({
   title:{
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#896a92',
   },
   formContainer: {
     paddingHorizontal: 10,
     marginTop: 20,
   },
   input: {
+    backgroundColor:'#eae0ed',
     height: 20,
     paddingVertical: 15,
     paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderStyle: "solid",
     borderRadius: 6,
     marginVertical: 10,
   },
   button: {
     flex:1,
     alignItems: 'center',
-    backgroundColor: "blue",
+    backgroundColor: '#6c4e75',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 4,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "#28a745",
+
   },
   buttonError:{
     flex:1,
     alignItems: 'center',
-    backgroundColor:'grey',
+    backgroundColor:'#896a92',
     paddingHorizontal: 10,
     paddingVertical: 6,
     textAlign: 'center',
     borderRadius:4, 
-    borderWidth:1,
-    borderStyle: 'solid',
-    borderColor: 'white',
     color: 'white'
 },
   textButton: {
