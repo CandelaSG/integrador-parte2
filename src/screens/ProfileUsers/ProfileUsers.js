@@ -81,7 +81,7 @@ componentDidMount(){
                   {item.datos.miniBio.length > 0 ? <Text> { item.datos.miniBio } </Text> : false}
                   <Text> { this.state.userPosts.length } posts</Text>
                 </>
->
+
                 )
               } 
             }
