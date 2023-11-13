@@ -49,7 +49,7 @@ class MyCamera extends Component{
         fetch(this.state.photo)
         .then(res => res.blob())
         .then(image => {
-           const ref = storage.ref(`${auth.currentUser.email}/${Date.now()}.jpg`)
+           const ref = storage.ref(`${auth.currentUser?.email}_${Date.now()}.jpg`)
            ref.put(image)
            .then( () => {
             ref.getDownloadURL()

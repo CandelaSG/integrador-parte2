@@ -14,6 +14,7 @@ class Search extends Component {
     };
   }
 
+
   componentDidMount() {
     this.unsubscribe = db.collection("user").onSnapshot((snapshot) => {
       let info = [];
@@ -51,7 +52,6 @@ class Search extends Component {
     console.log(filteredResults)
 
     return (
-        
       <View>
         <TextInput
           placeholder="Search by username"

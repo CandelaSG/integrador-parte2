@@ -19,21 +19,47 @@ class PostForm extends Component {
     this.state = { 
       post: "",
       showCamera:true,
-      url: ''
+      url: '',
+      userInfo: ''
     };
   }
 
+  componentDidMount(){
+    db.collection('user').where("owner", "==", auth.currentUser.email).onSnapshot(
+      data => {
+        let info = []
+        data.forEach(i => {
+          info.push(
+            {
+              id: i.id,
+              datos: i.data()
+            })
+        })
 
-  postear(){
+        this.setState({
+          userInfo: info
+    }, ()=> console.log(this.state))
+      }
+    )
+  }
+  postear()
+  {
     db.collection("posts").add({
         owner: auth.currentUser.email,
         post: this.state.post,
         photo: this.state.url,
         likes: [],
         comments:[],
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        userName: this.state.userInfo[0].datos.userName
     })
-    .then( console.log("Posteaste correctamente"))
+    .then( 
+      this.setState ({ 
+        post: "",
+        showCamera:true,
+        url: ''
+      })
+      )
     .catch(error => console.log(`El error fue: ${error}`))
   }
 
@@ -63,6 +89,7 @@ class PostForm extends Component {
           onPress={() => {
             this.postear()
             this.props.navigation.navigate('Home')
+            
           
           }}
         >

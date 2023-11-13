@@ -5,7 +5,8 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList 
+  FlatList ,
+  Image
 } from "react-native";
 import Post from "../../componentes/Post";
 
@@ -20,7 +21,7 @@ class Home extends Component {
   }
 
   componentDidMount(){
-    //Traer datos
+
     db.collection('posts').orderBy('createdAt' , 'desc').onSnapshot(
         posteos => {
             let postsAMostrar = [];
@@ -46,6 +47,7 @@ class Home extends Component {
     console.log(this.state.listaPost);
     return (
       <View style={styles.container}>
+        
                 {
                     this.state.listaPost.length === 0 
                     ?
@@ -69,6 +71,10 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'white'
   },
+  image: {
+    height: 400,
+  },
+
 });
 
 export default Home;

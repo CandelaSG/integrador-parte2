@@ -63,42 +63,46 @@ componentDidMount(){
     console.log(this.state);
     console.log(this.props.route.params);
     return (
-       <View>
-        {<FlatList 
-            data= {this.state.userInfo}
-            keyExtractor={ i  => i.id }
-            renderItem={ ({item}) => 
-            {
-              return (
-              <View style={styles.containerDatos}>
-                <Text> { item.datos.userName } </Text>
-                <Text> { item.datos.owner } </Text>
-                {item.datos.miniBio.length > 0 ? <Text> { item.datos.miniBio } </Text> : false}
-                <Text> { this.state.userPosts.length } posts</Text>
-              </View>
-              )
-            } 
-           }
-        />}
-        {<FlatList 
-            data= {this.state.userPosts}
-            keyExtractor={ i  => i.id }
-            renderItem={ ({item}) => 
-            {
-              return (
-              <View style={styles.containerPost}>
-                <Image style={styles.camera} source={{uri:item.datos.photo}}/>
-                <Text style={styles.textoPost}>{item.datos.post}</Text>
-                {item.datos.likes.length == 1? 
-                  <Text style={styles.textoPost}>{item.datos.likes.length} like</Text>:
-                  <Text style={styles.textoPost}>{item.datos.likes.length} likes</Text>
-                }
+       <View style={styles.container}>
+          <View style={styles.containerDatos}>
+              <Image 
+                style={styles.profilePic} 
+                source={{uri:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}}
+                resizeMode='contain'/> 
+            {<FlatList 
+              data= {this.state.userInfo}
+              keyExtractor={ i  => i.id }
+              renderItem={ ({item}) => 
+              {
+                return (
+                <>
+                  <Text> { item.datos.userName } </Text>
+                  <Text> { item.datos.owner } </Text>
+                  {item.datos.miniBio.length > 0 ? <Text> { item.datos.miniBio } </Text> : false}
+                  <Text> { this.state.userPosts.length } posts</Text>
+                </>
+>
+                )
+              } 
+            }
+          />}
+          </View>
+        <View style={styles.containerPost}>
+          {<FlatList 
+              data= {this.state.userPosts}
+              keyExtractor={ i  => i.id }
+              numColumns={3}
+              renderItem={ ({item}) => 
+              {
+                return (
                 
-              </View>
-              )
-            } 
-           }
-        />}
+                  <Image style={styles.camera} source={{uri:item.datos.photo}}/>
+                
+                )
+              } 
+            }
+          />}
+        </View>
 
 
       </View>
@@ -107,20 +111,34 @@ componentDidMount(){
 }
 
 const styles = StyleSheet.create({
+  /* container:{
+    flex:1
+  }, */
+  profilePic:{
+    height:40,
+    width:40,
+    borderRadius:25,
+    borderColor:'white',
+    marginRight:10
+},
   containerDatos:{
     alignItems:'center',
-    height: '100%',
+    height: '20%',
     marginBottom:5,
+
   },
   containerPost: {
+    flex:1,
+    flexDirection:'row',
+    flexWrap: 'wrap',
     marginTop: 5,
     marginBottom:5,
-    height: '70%'
+    height: '100%', 
     
   },
   camera: {
-      width: "100vw",
-      height: '50vh',
+      width: "33vw",
+      height: '20vh',
       marginTop: 10,
       marginBottom:15
   },
