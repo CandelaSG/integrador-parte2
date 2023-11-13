@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import Search from "./src/screens/Search/Search";  // Cambié el nombre para la pantalla de búsqueda
 import Register from "./src/screens/Register/Register";
 import Login from "./src/screens/Login/Login";
 import Home from "./src/screens/Home/Home";
@@ -30,11 +30,15 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-            name="ProfileUsers"
-            component={ProfileUsers}
-            options={{ headerShown: true }}
+          name="Search"  // Cambié el nombre de la pantalla
+          component={Search}  // Cambié el componente asociado
+          options={{ headerShown: false }}
         />
-        
+        <Stack.Screen
+          name="ProfileUsers"
+          component={ProfileUsers}
+          options={{ headerShown: true }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

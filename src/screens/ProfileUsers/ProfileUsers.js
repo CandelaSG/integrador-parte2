@@ -90,8 +90,7 @@ componentDidMount(){
                 <Image style={styles.camera} source={{uri:item.datos.photo}}/>
                 <Text style={styles.textoPost}>{item.datos.post}</Text>
                 {item.datos.likes.length == 1? 
-                  <Text style={styles.textoPost}>{item.datos.likes.length} like</Text>
-                  :
+                  <Text style={styles.textoPost}>{item.datos.likes.length} like</Text>:
                   <Text style={styles.textoPost}>{item.datos.likes.length} likes</Text>
                 }
                 

@@ -1,261 +1,88 @@
 import React, { Component } from "react";
-import {
-  TextInput,
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  FlatList 
-} from "react-native";
+import { TextInput, View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
 
 import { auth, db } from "../../firebase/config";
 
-
-
-
 class Search extends Component {
-  constructor() {
-    super();
-    this.state = { 
-      search:'',
-      resultsUserName:[],
-      resultsEmail:[],
-      results:[],
-      hayResultados: false,
-      allUsers:[]
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      search: "",
+      results: [],
+      selectedUserId: "",
     };
   }
-    componentDidMount(){
-        if (this.state.resultsUserName.length == 0 && this.state.resultsEmail.length == 0) {
-            this.setState({
-                hayResultados: false
-            })
-            
-        }
 
-        db.collection('user').onSnapshot(
-            data => {
-                let info = []
-                data.forEach( i => {
-                    info.push(
-                      {
-                        id: i.id,
-                        datos: i.data()
-                      })
-                  })
-      
-                  this.setState({
-                      allUsers: info
-                  })
-                  ;
-            }
-          )
-        
-    }
+  componentDidMount() {
+    this.unsubscribe = db.collection("user").onSnapshot((snapshot) => {
+      let info = [];
+      snapshot.forEach((doc) => {
+        info.push({
+          id: doc.id,
+          datos: doc.data(),
+        });
+      });
 
-  search(event){
-
-    this.setState({search: event.target.value})
-    /* BUSCO POR EMAIL */
-    db.collection('user').where('owner', '==', this.state.search)
-    .get()
-    .then(
-        resultOwner => {
-        let resultUsers = [];
-
-        resultOwner.forEach( owner => {
-            resultUsers.push(
-                {
-                    id: owner.id,
-                    datos: owner.data()
-                }
-            )
-        })
-
-        this.setState({
-            resultsEmail: resultUsers,
-            hayResultados:true
-        })
-    })
-    .catch(e=> console.log(e))
-
-    db.collection('user').where('userName', '==', this.state.search)
-    .get()
-    .then(resultUserName => {
-        let resultUsers = [];
-
-        resultUserName.forEach( userName => {
-            resultUsers.push(
-                {
-                    id: userName.id,
-                    datos: userName.data()
-                }
-            )
-        })
-
-        this.setState({
-            resultsUserName: resultUsers,
-            hayResultados:true
-        })
-    }) 
-    .catch(e=> console.log(e))
+      this.setState({
+        results: info,
+      });
+    });
   }
 
-  search2(event){
-    this.setState({search: event.target.value})
-    /* BUSCO POR EMAIL */
-    db.collection('user').where('owner', '==', this.state.search).get()
-    .then(resultOwner => {
-        /* BUSCO POR NOMBRE DE USUARIO */
-        db.collection('user').where('userName', '==', this.state.search).get()
-            .then(resultUserName => {
-                const resultUsers = [];
-                resultOwner.forEach(user => {
-                    resultUsers.push({
-                        id: user.id,
-                        datos: user.data()
-                    });
-                });
-                resultUserName.forEach(doc => {
-                    resultUsers.push({
-                        id: doc.id,
-                        datos: doc.data()
-                    });
-                });
-
-
-                this.setState({
-                    results: resultUsers,
-                    hayResultados:true
-                });
-            })
-            .catch(e => {
-                console.error(e);
-            });
-    })
-    .catch(e => {
-        console.error(e);
-    });
-   
-}
-
-    filtro(event){ 
-        this.setState({search: event.target.value});
-        let filtroResults=[];
-        this.state.allUsers.forEach(user => {
-            console.log(user);
-            if(user.email.includes(this.state.search)){}
-            filtroResults.push({
-                id: user.id,
-                datos: user.data()
-            });
-        });
-        this.setState({
-            results:filtroResults
-        })
-
+/*   componentWillUnmount() {
+    // Limpiar el listener de la base de datos al desmontar el componente
+    if (this.unsubscribe) {
+      this.unsubscribe();
     }
+  } */
+
+  handleUserSelect(selectedUserId) {
+    // Redirigir a la pantalla de ProfileUsers con el ID del usuario seleccionado
+    this.props.navigation.navigate('ProfileUsers', selectedUserId );
+  }
 
   render() {
-    console.log(auth.currentUser);
-    console.log(this.state);
+    // Filtrar usuarios basados en la entrada del usuario
+    const filteredResults = this.state.results.filter((user) =>
+      user.datos.userName.toLowerCase().includes(this.state.search.toLowerCase())
+    );
+
+    console.log(filteredResults)
+
     return (
-        <View>
-
-            <TextInput
-            placeholder='Search by username or email'
-            keyboardType='default'
-            value={this.state.search}
-            style={styles.input}
-            onChange={(event) => this.search(event)}
-            />
-            
-            {this.state.hayResultados == true
-            ?
-            <Text>Couldn't find what you are searching for</Text>
-            :
-            
-            (this.state.resultsUserName.length > 0
-                ?
-                (<FlatList
-                data = {this.state.resultsUserName}
-                keyExtractor={user => user.id}
-                renderItem = {({item}) => (
-                    <View>
-                    <Text>{item.datos.userName}</Text>
-                    </View>
-                )} 
-            />):
-                (<FlatList
-                    data = {this.state.resultsEmail}
-                    keyExtractor={user => user.id}
-                    renderItem = {({item}) => (
-                        <View>
-                        <Text>{item.datos.owner}</Text>
-                        </View>
-                    )} 
-                />))
-            
-            
-            }
-
-        </View>
-      
-
         
+      <View>
+        <TextInput
+          placeholder="Search by username"
+          keyboardType="default"
+          value={this.state.search}
+          style={styles.input}
+          onChangeText={(text) => this.setState({ search: text })}
+        />
+
+        <FlatList
+          data={filteredResults}
+          keyExtractor={(user) => user.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => this.handleUserSelect(item.datos.owner)}>
+              <Text>{item.datos.userName}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
     );
   }
 }
-const styles = StyleSheet.create({
-    title:{
-        fontWeight: 'bold'
-      },
-    formContainer:{
-        paddingHorizontal:10,
-        marginTop: 20,
-    },
-    input:{
-        height:20,
-        paddingVertical:15,
-        paddingHorizontal: 10,
-        borderWidth:1,
-        borderColor: '#ccc',
-        borderStyle: 'solid',
-        borderRadius: 6,
-        marginVertical:10,
-    },
-    button:{
-        flex:1,
-        alignItems: 'center',
-        backgroundColor:'#28a745',
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        textAlign: 'center',
-        borderRadius:4, 
-        borderWidth:1,
-        borderStyle: 'solid',
-        borderColor: '#28a745'
-    },
-    buttonError:{
-        flex:1,
-        alignItems: 'center',
-        backgroundColor:'grey',
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        textAlign: 'center',
-        borderRadius:4, 
-        borderWidth:1,
-        borderStyle: 'solid',
-        borderColor: 'white',
-        color: 'white'
-    },
-    textButton:{
-        color: '#fff'
-    },
-    textError:{
-        color:'red'
-    }
 
-})
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    margin: 10,
+    paddingLeft: 10,
+  },
+});
 
 export default Search;
