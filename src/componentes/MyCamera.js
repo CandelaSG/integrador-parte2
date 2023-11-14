@@ -4,6 +4,8 @@ import {Camera} from 'expo-camera';
 import { storage } from "../firebase/config";
 import { auth } from "../firebase/config";
 
+import { FontAwesome } from '@expo/vector-icons';   
+
 
 
 class MyCamera extends Component{
@@ -69,34 +71,38 @@ class MyCamera extends Component{
                     this.state.showCamera ?
                     <View style={styles.container} >
                         <Camera style={styles.camera} type={Camera.Constants.Type.front} ref={metodosCamara => this.metodosCamara = metodosCamara}/>
-                        <View>
+                        <View style={styles.containerButton}>
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={() => this.takePicture()}
                                 >
-                                <Text style={styles.textButton}>Take Picture</Text>
+                               <Text style={styles.textButton}>Take Picture</Text>
                             </TouchableOpacity>
                         </View>
                        
                     </View>
                 :
-                    <View style={styles.container}>
-                        <Image style={styles.camera} source={{uri: this.state.photo}} />
+                <>
+                    <Image style={styles.camera} source={{uri: this.state.photo}} />
+                    
+                    <View style={styles.containerAcceptyCancel}>
+                        
                         <TouchableOpacity
-                            style={styles.button}
+                            style={styles.accept}
                             onPress={() => this.acceptPicture()}
                             >
                             <Text style={styles.textButton}>Accept</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={styles.button}
+                            style={styles.cancel}
                             onPress={() => this.cancelPicture()}
                             >
                             <Text style={styles.textButton}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
+                    </>
                 :
-                <Text>No me diste los permisos de la camara</Text>
+                <Text style={styles.textCamera}>You did not give us permission to use your camera</Text>
                 }
             </>
         )
@@ -104,6 +110,36 @@ class MyCamera extends Component{
 }
 
 const styles = StyleSheet.create({
+    containerAcceptyCancel:{
+
+        flexDirection:'row',
+        justifyContent:'center',
+    },
+    accept:{
+        height:35,
+        width:100,
+        alignItems: 'center',
+        backgroundColor: "#5ac15d",
+        padding:10,
+        borderRadius:10,
+        margin:15,
+    },
+    cancel:{
+        height:35,
+        width:100,
+        alignItems: 'center',
+        backgroundColor: "#ec5853",
+        padding:10,
+        borderRadius:10,
+        margin:15,
+    },
+    containerButton:{
+        alignItems: 'center',
+        justifyContent:'center'
+    },
+    textCamera:{
+        margin:50,
+    },
     title:{
       fontWeight: 'bold'
     },
@@ -115,16 +151,11 @@ const styles = StyleSheet.create({
     },
     button: {
       flex:1,
-      width:150,
+      width:'100%',
       height:10,
       alignItems: 'center',
-      backgroundColor: "blue",
-      paddingHorizontal: 10,
-      paddingVertical: 6,
-      borderRadius: 4,
-      borderWidth: 1,
-      borderStyle: "solid",
-      borderColor: "#28a745",
+      backgroundColor: "#896a92",
+      padding:10,
     },
     
     textButton: {

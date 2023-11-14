@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Search from "./src/screens/Search/Search";  // Cambié el nombre para la pantalla de búsqueda
+import Search from "./src/screens/Search/Search"; 
 import Register from "./src/screens/Register/Register";
+
 import Login from "./src/screens/Login/Login";
-import Home from "./src/screens/Home/Home";
 import Menu from "./src/componentes/Menu";
 import ProfileUsers from "./src/screens/ProfileUsers/ProfileUsers";
 
@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer style={styles.container}>
+    <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="Login"
@@ -20,7 +20,7 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Registro"
+          name="Register"
           component={Register}
           options={{ headerShown: false }}
         />
@@ -30,22 +30,16 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Search"  // Cambié el nombre de la pantalla
-          component={Search}  // Cambié el componente asociado
+          name="Search"  
+          component={Search} 
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="ProfileUsers"
+          name="Profile"
           component={ProfileUsers}
-          options={{ headerShown: true }}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-
-  },
-});

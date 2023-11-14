@@ -6,11 +6,13 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  Image
+  Image,
+  ActivityIndicator
 } from "react-native";
 
 import { auth, db } from "../../firebase/config";
 
+import { FontAwesome } from '@expo/vector-icons';   
 
 
 class Profile extends Component {
@@ -23,7 +25,9 @@ class Profile extends Component {
   }
   componentDidMount() {
     /* BUSCO LOS USUARIOS */
-    db.collection('user').where("owner", "==", auth.currentUser.email).onSnapshot(
+    db.collection('user')
+    .where("owner", "==", auth.currentUser.email)
+    .onSnapshot(
       data => {
         let info = []
         data.forEach(i => {
@@ -41,7 +45,9 @@ class Profile extends Component {
     )
 
     /* BUSCO LOS POSTEOS */
-    db.collection('posts').where('owner', '==', auth.currentUser.email).onSnapshot(
+    db.collection('posts')
+    .where('owner', '==', auth.currentUser.email)
+    .onSnapshot(
       data => {
         let info = []
         data.forEach(i => {
@@ -79,59 +85,121 @@ class Profile extends Component {
   render() {
 
     return (
+      
       <View style={styles.formContainer}>
+        
+  
         {this.state.userInfo.length > 0 ?
-          <>
-            <Text> {this.state.userInfo[0].datos.userName} </Text>
+        <>
+          <View style= {styles.conteinerProfile}>
+            
+            <Image 
+            style={styles.profilePic} 
+            source={{uri:this.state.userInfo[0].datos.profilePic}}
+            resizeMode='contain'/> 
+            
+            <View style={styles.containerDatos}>
+            <Text style={styles.userName}> {this.state.userInfo[0].datos.userName} </Text>
             <Text> {this.state.userInfo[0].datos.owner} </Text>
             {this.state.userInfo[0].datos.miniBio.length > 0 ? <Text> {this.state.userInfo[0].datos.miniBio} </Text> : false}
-            <Text> { this.state.userPosts.length } posts</Text>
-          </>
-          : false
-        }
-        <View style={styles.container}>
+            
+            {this.state.userPosts.length == 0 ? 
+              <Text style={styles.post}> { this.state.userPosts.length } posts</Text>
+              :
+               <Text style={styles.post}> { this.state.userPosts.length } post</Text>}
 
-        {<FlatList
-          data={this.state.userPosts}
-          keyExtractor={i => i.id}
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.containerPost}>
-                <Image style={styles.camera} source={{ uri: item.datos.photo }} />
-                <Text style={styles.textoPost}>{item.datos.post}</Text>
-                {item.datos.likes.length == 1 ?
-                  <Text style={styles.textoPost}>{item.datos.likes.length} like</Text>
-                  :
-                  <Text style={styles.textoPost}>{item.datos.likes.length} likes</Text>
-                }
-                <TouchableOpacity onPress={() => this.deletePost(item.id)}>
-                  <Text>Delete post</Text>
-                </TouchableOpacity>
+              <TouchableOpacity  onPress={() => this.logout()}>
+              <Text style={styles.botonLogout}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+            
+          </View>
 
-              </View>)
-          }}
-          />}
+          <View style={styles.container}>
+
+            {<FlatList
+              data={this.state.userPosts}
+              keyExtractor={i => i.id}
+              renderItem={({ item }) => {
+                return (
+
+                  <View style={styles.containerPost}>
+                    <Image style={styles.camera} source={{ uri: item.datos.photo }} />
+                    
+                    <TouchableOpacity style={styles.deleteButton} onPress={() => this.deletePost(item.id)}>
+                      
+                      <FontAwesome style={styles.dislike}  name='trash' size={15}/>
+                      <Text style={styles.deleteText} >Delete post</Text>
+                      
+                    </TouchableOpacity>
+
+                  </View>)
+              }}
+              />}
 
           </View>
 
-        <TouchableOpacity onPress={() => this.logout()}>
-          <Text>Logout</Text>
-        </TouchableOpacity>
+
+          </>
+          : 
+          <View style={styles.activityIndicatorContainer}>
+            <ActivityIndicator  size='small' color='purple' />
+          </View>
+        }
+        
+
+          
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container:{flex: 1},
+  deleteText:{
+    color: 'black',
+    fontWeight:'bold',
+    marginLeft:5,
+  },
+  deleteButton:{
+    width:'100%',
+    height:30,
+    flexDirection:'row',
+    backgroundColor: '#D9D6D6',
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  post:{
+    color:'grey',
+  },
+  botonLogout:{
+    color: "#ec5853",
+    fontWeight:'bold',
+  },
+  activityIndicatorContainer:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  container:{
+    flex: 1,
+    height:'100%'
+  },
+  userName:{
+    fontWeight: 'bold'
+  },
   formContainer: {
     height: '100%',
     marginBottom: 10,
+    marginTop:20,
   },
-  containerDatos: {
-    alignItems: 'center',
-    height: '100%',
+  containerDatos:{
     marginBottom: 5,
+  },
+  conteinerProfile: {
+    flexDirection:'row',
+    justifyContent: 'center',
+    marginBottom: 5,
+    marginTop:15,
   },
   containerPost: {
     marginTop: 5,
@@ -142,11 +210,16 @@ const styles = StyleSheet.create({
     width: "100vw",
     height: '50vh',
     marginTop: 10,
-    marginBottom: 15
   },
   textoPost: {
     marginLeft: 5,
   },
+  profilePic:{
+    height:70,
+    width:70,
+    borderRadius:45,
+    marginRight:10
+},
 });
 
 export default Profile;

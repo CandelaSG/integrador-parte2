@@ -6,7 +6,8 @@ import {
   Text,
   StyleSheet,
   FlatList ,
-  Image
+  Image,
+  ActivityIndicator
 } from "react-native";
 import Post from "../../componentes/Post";
 
@@ -51,13 +52,22 @@ class Home extends Component {
                 {
                     this.state.listaPost.length === 0 
                     ?
-                    <Text>Cargando...</Text>
+                    <View style={styles.activityIndicatorContainer}>
+                      <ActivityIndicator  size='small' color='purple' />
+                    </View>
                     :
+                    <>
+                    <View style={styles.containerLogo}>
+                        <Image style={styles.logo} 
+                        source={require('../../../assets/LOGO.png')}
+                        resizeMode='contain'/>
+                        </View>
                     <FlatList 
                         data= {this.state.listaPost}
                         keyExtractor={ unPost => unPost.id }
                         renderItem={ ({item}) => <Post infoPost = { item } navigation={this.props.navigation} /> }
                     />
+                    </>
                 }
 
       </View>
@@ -74,7 +84,17 @@ const styles = StyleSheet.create({
   image: {
     height: 400,
   },
-
+  containerLogo:{
+    padding:20,
+  },
+  logo:{
+    height:20
+  },
+  activityIndicatorContainer:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+  },
 });
 
 export default Home;

@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import {TextInput, TouchableOpacity, View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import { auth, db } from '../firebase/config';
 import firebase from 'firebase';
+
 import { FontAwesome } from '@expo/vector-icons';   
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faCoffee, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 class Post extends Component {
     constructor(props){
@@ -27,24 +30,6 @@ class Post extends Component {
                 this.setState({ like: true })
             }})
         }
-
-
-        /* db.collection('user').where('owner','==', this.props.route.params).onSnapshot(
-            data => {
-                let info = []
-                data.forEach( i => {
-                    info.push(
-                      {
-                        id: i.id,
-                        datos: i.data()
-                      })
-                  })
-     
-                  this.setState({
-                      userInfo: info
-                  })
-            }
-          ) */
     }
 
 
@@ -70,40 +55,50 @@ class Post extends Component {
              
                 {/* PERFIL */}
                 <TouchableOpacity
-                    onPress={ ()=> this.props.navigation.navigate('ProfileUsers', this.props.infoPost.datos.owner)}
+                    onPress={ ()=> this.props.navigation.navigate('Profile', this.props.infoPost.datos.owner ) }
                     style={styles.container}
                     >
+                    {this.props.infoPost.datos.profilePic != '' ?
                     <Image 
                         style={styles.profilePic} 
+                        source={{uri:this.props.infoPost.datos.profilePic}}
+                        resizeMode='contain'/> :
+                        <Image 
+                        style={styles.profilePic} 
                         source={{uri:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}}
-                        resizeMode='contain'/> 
+                        resizeMode='contain'/> }
 
                     <Text style={styles.userName}>{this.props.infoPost.datos.userName}</Text>
                 </TouchableOpacity>
                 
                 {/* FOTO DEL POSTEO */}
                 <Image style={styles.camera} source={{uri:this.props.infoPost.datos.photo }}/>
+                <View style={styles.contenedorLikes}>
+                {this.state.like ? 
+                <TouchableOpacity onPress={()=>this.dislike()}>
+
+                    <FontAwesome style={styles.dislike}  name='heart' size={15}/>
+                </TouchableOpacity>
+                :
+                <TouchableOpacity style={styles.like} onPress={()=>this.likear()} >
+
+                   <FontAwesome name='heart-o' size={15}/>
+                </TouchableOpacity>
+                }
+
                 {this.props.infoPost.datos.likes.length== 1? 
                   <Text style={styles.texto}>{this.props.infoPost.datos.likes.length} like</Text>
                   :
                   <Text style={styles.texto} >{this.props.infoPost.datos.likes.length} likes</Text>
                 }
-                
-                <Text style={styles.usuario}>{this.props.infoPost.datos.userName} {this.props.infoPost.datos.post}</Text>
-                
-
-                {/* If ternario */}
-                {this.state.like ? 
-                <TouchableOpacity style={styles.button} onPress={()=>this.dislike()}>
-                    
-                    <Text style={styles.textButton} >DISLIKE</Text>
+                </View>
+                <View style={styles.description}>
+                <TouchableOpacity
+                    onPress={ ()=> this.props.navigation.navigate('Profile', this.props.infoPost.datos.owner)}>
+                    <Text style={styles.nameDescription}>{this.props.infoPost.datos.userName} </Text>
                 </TouchableOpacity>
-                :
-                <TouchableOpacity style={styles.button} onPress={()=>this.likear()} >
-                    <FontAwesome name={'heart'} />
-                </TouchableOpacity>
-                }
-                
+                    <Text >{this.props.infoPost.datos.post}</Text>
+                </View>
             </View>
         )
     }
@@ -115,6 +110,15 @@ const styles = StyleSheet.create({
       height: 400
       
     },
+    dislike:{
+        color: 'red'
+    },
+    contenedorLikes:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent: 'left',
+        marginLeft: 10
+    },
     container:{
         flex:1,
         flexDirection: 'row',
@@ -122,6 +126,8 @@ const styles = StyleSheet.create({
         width: '100vw',
         justifyContent:'left',
         marginLeft:5,
+        marginTop:5,
+        marginBottom:10,
     },
     profilePic:{
         height:40,
@@ -136,7 +142,8 @@ const styles = StyleSheet.create({
     },
     userName:{
         paddingTop:10,
-        paddingLeft:10,
+        paddingLeft:6,
+        fontWeight: 'bold',
     },
     camera: {
         width: "100vw",
@@ -170,8 +177,15 @@ const styles = StyleSheet.create({
     image: {
         height: 400,
       },
-      usuario:{
-        fontWeight:'bold'
+      description:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent: 'left',
+        marginLeft:10,
+        marginBottom:10,
+      },
+      nameDescription:{
+        fontWeight: 'bold',
       }
   });
 

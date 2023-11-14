@@ -11,8 +11,6 @@ import {
 import { auth, db } from "../../firebase/config";
 import MyCamera from '../../componentes/MyCamera'
 
-
-
 class PostForm extends Component {
   constructor() {
     super();
@@ -42,8 +40,8 @@ class PostForm extends Component {
       }
     )
   }
-  postear()
-  {
+
+  postear(){
     db.collection("posts").add({
         owner: auth.currentUser.email,
         post: this.state.post,
@@ -51,7 +49,8 @@ class PostForm extends Component {
         likes: [],
         comments:[],
         createdAt: Date.now(),
-        userName: this.state.userInfo[0].datos.userName
+        userName: this.state.userInfo[0].datos.userName,
+        profilePic: this.state.userInfo[0].datos.profilePic,
     })
     .then( 
       this.setState ({ 
@@ -67,8 +66,9 @@ class PostForm extends Component {
     this.setState({ url: url , showCamera: false});
   }
 
+  
   render() {
-    console.log(auth.currentUser);
+    console.log(this.state.userInfo);
     return (
       <View style={styles.container}>
 
@@ -80,7 +80,7 @@ class PostForm extends Component {
           <TextInput
           style={styles.input}
           onChangeText={(text) => this.setState({ post: text })}
-          placeholder="Escribe un post"
+          placeholder="Description"
           keyboardType="default"
           value={this.state.post}
         />
@@ -93,7 +93,7 @@ class PostForm extends Component {
           
           }}
         >
-          <Text style={styles.textButton} >Postear</Text>
+          <Text style={styles.textButton} >Post</Text>
         </TouchableOpacity>
 
         </React.Fragment>
@@ -118,21 +118,16 @@ const styles = StyleSheet.create({
       height: 20,
       paddingVertical: 15,
       paddingHorizontal: 10,
-      borderWidth: 1,
-      borderColor: "#ccc",
-      borderStyle: "solid",
       borderRadius: 6,
       marginVertical: 10,
+      backgroundColor:'#eae0ed',
     },
     button: {
-      backgroundColor: "blue",
+      backgroundColor: '#6c4e75',
       paddingHorizontal: 10,
       paddingVertical: 6,
       textAlign: "center",
       borderRadius: 4,
-      borderWidth: 1,
-      borderStyle: "solid",
-      borderColor: "#28a745",
     },
     textButton: {
       color: "#fff",

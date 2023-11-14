@@ -7,12 +7,14 @@ import {
   View,
   Text,
   StyleSheet,
+  ActivityIndicator
 } from "react-native";
 
 class Login extends Component {
   constructor() {
     super();
     this.state = {
+      logueado:false,
       email: "",
       password: "",
       textError: "",
@@ -24,6 +26,9 @@ class Login extends Component {
       if (user) {
         this.props.navigation.navigate("Menu");
       }
+      this.setState({
+        logueado: true
+      })
     });
   }
 
@@ -31,12 +36,6 @@ class Login extends Component {
     auth
       .signInWithEmailAndPassword(email, pass)
       .then((response) => {
-        //Cuando firebase responde sin error
-        console.log("Login ok", response);
-
-        //Cambiar los estados a vacío como están al inicio.
-
-        //Redirigir al usuario a la home del sitio.
         this.props.navigation.navigate("Menu");
       })
       .catch((error) => {
@@ -56,51 +55,64 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.formContainer}>
+       {this.state.logueado == true ?
+      <>
+       <Text style={styles.title}> Login</Text>
+        
+       {/* EMAIL */}
+       <TextInput
+         style={styles.input}
+         onChangeText={(text) => this.setState({ email: text })}
+         placeholder="example@email.com"
+         keyboardType="email-address"
+         value={this.state.email}
+       />
+
+       {/* PASSWORD */}
+       <TextInput
+         style={styles.input}
+         onChangeText={(text) => this.setState({ password: text })}
+         placeholder="Password"
+         keyboardType="default"
+         secureTextEntry={true}
+         value={this.state.password}
+       />
        
-        <Text style={styles.title}> Login</Text>
+       {this.state.email.length > 0 && this.state.password.length > 0 ? 
+
+       <TouchableOpacity
+         style={styles.button}
+         onPress={() => this.login(this.state.email, this.state.password)}>
+         <Text style={styles.textButton}>Login</Text>
+       </TouchableOpacity> :
+       <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: 'You must complete the required fields'})}>
+       <Text style={styles.textButton} > Login</Text>    
+       </TouchableOpacity> }  
+       {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false }
+
+       <TouchableOpacity
+         onPress={() => this.props.navigation.navigate("Register")}
+         style={styles.register}>
+         <Text>Don't have an account? Register.</Text>
+       </TouchableOpacity>
+       </>
+       : 
+        <View style={styles.activityIndicatorContainer}>
+            <ActivityIndicator  size='small' color='purple' />
+        </View>
+       }
         
-        {/* EMAIL */}
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({ email: text })}
-          placeholder="example@email.com"
-          keyboardType="email-address"
-          value={this.state.email}
-        />
-
-        {/* PASSWORD */}
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({ password: text })}
-          placeholder="Password"
-          keyboardType="default"
-          secureTextEntry={true}
-          value={this.state.password}
-        />
-        
-        {this.state.email.length > 0 && this.state.password.length > 0 ? 
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => this.login(this.state.email, this.state.password)}>
-          <Text style={styles.textButton}>Login</Text>
-        </TouchableOpacity> :
-        <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: 'You must complete the required fields'})}>
-        <Text style={styles.textButton} > Login</Text>    
-        </TouchableOpacity> }  
-        {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false }
-
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Registro")}
-          style={styles.register}>
-          <Text>Don't have an account? Register.</Text>
-        </TouchableOpacity>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  activityIndicatorContainer:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+  },
   title:{
     fontWeight: 'bold',
     color: '#896a92',

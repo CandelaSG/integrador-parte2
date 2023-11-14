@@ -105,11 +105,17 @@ class Register extends Component {
                         />
 
                     {/* PROFILE PICTURE */}
-
-                    <TouchableOpacity style={styles.buttonPhoto} onPress={()=> this.setState({showCamera: true})}>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(url)=>this.setState({profilePic: url})}
+                        placeholder='Add the URL of your picture'
+                        keyboardType='default'
+                        value={this.state.profilePic}
+                        />
+                    {/* <TouchableOpacity style={styles.buttonPhoto} onPress={()=> this.setState({showCamera: true})}>
                         <Text> Add profile picture</Text>    
                     </TouchableOpacity>
-                    
+                     */}
                     {this.state.email.length > 0 && this.state.password.length >0 && this.state.userName.length > 0 ? 
 
                     <TouchableOpacity style={styles.button} onPress={()=> 
