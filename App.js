@@ -6,7 +6,8 @@ import Register from "./src/screens/Register/Register";
 
 import Login from "./src/screens/Login/Login";
 import Menu from "./src/componentes/Menu";
-import ProfileUsers from "./src/screens/ProfileUsers/ProfileUsers";
+import Comments from "./src/screens/Comments/Comments";
+import ProfileUsers from "./src/screens/ProfileUsers/profileUsers";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,11 @@ export default function App() {
         <Stack.Screen
           name="Profile"
           component={ProfileUsers}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Comments"
+          component={Comments}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -10,9 +10,7 @@ import {
   ActivityIndicator
 } from "react-native";
 
-import { auth, db } from "../../firebase/config";
-
-import { FontAwesome } from '@expo/vector-icons';  
+import { auth, db } from "../../firebase/config"; 
 
 class ProfileUsers extends Component {
   constructor(props) {
@@ -58,7 +56,7 @@ componentDidMount(){
             })
 
             this.setState({
-                userPosts: info
+                userPosts: info 
             })
             ;
       }

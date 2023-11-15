@@ -83,7 +83,7 @@ class Profile extends Component {
   }
 
   render() {
-
+    console.log(auth.currentUser.email);
     return (
       
       <View style={styles.formContainer}>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {TextInput, TouchableOpacity, View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import { auth, db } from '../firebase/config';
 import firebase from 'firebase';
-
+import { Feather } from '@expo/vector-icons'; 
 import { FontAwesome } from '@expo/vector-icons';   
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faCoffee, faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +12,7 @@ class Post extends Component {
         super(props)
         this.state={
             like: false,
+            comment: ""
         }
 
         
@@ -46,7 +47,13 @@ class Post extends Component {
     })
     .then(this.setState({like: false}))
    }
-   
+   comment(texto){
+    db.collection("posts").doc(this.props.infoPost.id).update({
+        comments: firebase.firestore.FieldValue.arrayUnion(texto)
+    })
+    .then(this.setState({comment: ""}))
+   }
+
 
     render(){
         console.log(this.props.infoPost);
@@ -98,7 +105,30 @@ class Post extends Component {
                     <Text style={styles.nameDescription}>{this.props.infoPost.datos.userName} </Text>
                 </TouchableOpacity>
                     <Text >{this.props.infoPost.datos.post}</Text>
+                   
                 </View>
+                <TouchableOpacity style={styles.commentCount}
+                    onPress={ ()=> this.props.navigation.navigate('Comments', this.props.infoPost.datos.photo)}>
+                     {this.props.infoPost.datos.comments.length== 1? 
+                        <Text style={styles.texto}> {this.props.infoPost.datos.comments.length} comment</Text>
+                        :
+                        <Text style={styles.texto}> {this.props.infoPost.datos.comments.length} comments</Text>
+                    }  
+                </TouchableOpacity>
+               
+
+                <View style={styles.containerComment}>
+                <TextInput
+                        style={styles.inputComment}
+                        onChangeText={(text) => this.setState({comment: text })}
+                        placeholder="Comment..."
+                        keyboardType="default"
+                        value={this.state.comment}
+                    />
+                <TouchableOpacity onPress={()=>this.comment(this.state.comment)}>
+                <Feather name="send" size={24} color="black" />
+                </TouchableOpacity> 
+                </View>   
             </View>
         )
     }
@@ -106,8 +136,8 @@ class Post extends Component {
 
 const styles = StyleSheet.create({
     formContainer: {
-      marginTop: 5,
-      height: 400
+      marginTop: 30,
+      height: 500
       
     },
     dislike:{
@@ -182,12 +212,32 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent: 'left',
         marginLeft:10,
-        marginBottom:10,
+        marginBottom:1,
       },
       nameDescription:{
         fontWeight: 'bold',
-      }
-  });
+      },
+      containerComment:{
+        flexDirection: "row",
+        alignItems: 'center',
+        width: '100%',
+        flex: 1
+      },
+      commentCount: {
+        flex:1,
+        flexDirection:'row',
+        marginTop: 2,
+        marginBottom:10,
+        justifyContent: 'left'
+      },
+      inputComment: {
+        height: 20,
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        borderRadius: 6,
+        marginVertical: 10,
+        backgroundColor:'#eae0ed'},
+      });
 
 
 
