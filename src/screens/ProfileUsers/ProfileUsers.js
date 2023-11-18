@@ -10,6 +10,8 @@ import {
   ActivityIndicator
 } from "react-native";
 
+
+import { FontAwesome } from '@expo/vector-icons'; 
 import { auth, db } from "../../firebase/config"; 
 
 class ProfileUsers extends Component {

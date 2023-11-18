@@ -49,7 +49,10 @@ class Post extends Component {
    }
    comment(texto){
     db.collection("posts").doc(this.props.infoPost.id).update({
-        comments: firebase.firestore.FieldValue.arrayUnion(texto)
+        comments: firebase.firestore.FieldValue.arrayUnion({
+            owner: auth.currentUser.email,
+            comment: texto
+        })
     })
     .then(this.setState({comment: ""}))
    }
@@ -100,10 +103,21 @@ class Post extends Component {
                 }
                 </View>
                 <View style={styles.description}>
+                {this.props.infoPost.datos.owner != auth.currentUser.email ? 
                 <TouchableOpacity
                     onPress={ ()=> this.props.navigation.navigate('Profile', this.props.infoPost.datos.owner)}>
                     <Text style={styles.nameDescription}>{this.props.infoPost.datos.userName} </Text>
                 </TouchableOpacity>
+                :
+                <TouchableOpacity
+                    onPress={ ()=> this.props.navigation.navigate('MyProfile', this.props.infoPost.datos.owner)}>
+                    <Text style={styles.nameDescription}>{this.props.infoPost.datos.userName} </Text>
+                </TouchableOpacity>
+               }  
+                {/* <TouchableOpacity
+                    onPress={ ()=> this.props.navigation.navigate('Profile', this.props.infoPost.datos.owner)}>
+                    <Text style={styles.nameDescription}>{this.props.infoPost.datos.userName} </Text>
+                </TouchableOpacity> */}
                     <Text >{this.props.infoPost.datos.post}</Text>
                    
                 </View>

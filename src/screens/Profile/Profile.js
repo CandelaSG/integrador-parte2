@@ -11,7 +11,6 @@ import {
 } from "react-native";
 
 import { auth, db } from "../../firebase/config";
-
 import { FontAwesome } from '@expo/vector-icons';   
 
 
@@ -87,12 +86,15 @@ class Profile extends Component {
     return (
       
       <View style={styles.formContainer}>
-        
+      <TouchableOpacity
+          onPress={() => this.props.navigation.navigate("Menu")}
+          style={styles.coontainerFlecha}>
+         <FontAwesome style={styles.flecha} name="arrow-left" size='large'/>
+       </TouchableOpacity>
   
         {this.state.userInfo.length > 0 ?
         <>
           <View style= {styles.conteinerProfile}>
-            
             <Image 
             style={styles.profilePic} 
             source={{uri:this.state.userInfo[0].datos.profilePic}}
