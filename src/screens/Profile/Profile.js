@@ -7,9 +7,8 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
-
 import { auth, db } from "../../firebase/config";
 import { FontAwesome } from '@expo/vector-icons';   
 
@@ -23,7 +22,6 @@ class Profile extends Component {
     };
   }
   componentDidMount() {
-    /* BUSCO LOS USUARIOS */
     db.collection('user')
     .where("owner", "==", auth.currentUser.email)
     .onSnapshot(
@@ -43,7 +41,7 @@ class Profile extends Component {
       }
     )
 
-    /* BUSCO LOS POSTEOS */
+ 
     db.collection('posts')
     .where('owner', '==', auth.currentUser.email)
     .onSnapshot(
@@ -95,10 +93,17 @@ class Profile extends Component {
         {this.state.userInfo.length > 0 ?
         <>
           <View style= {styles.conteinerProfile}>
+          {this.state.userInfo[0].datos.profilePic != '' ?
             <Image 
-            style={styles.profilePic} 
-            source={{uri:this.state.userInfo[0].datos.profilePic}}
-            resizeMode='contain'/> 
+              style={styles.profilePic} 
+              source={{uri:this.state.userInfo[0].datos.profilePic}}
+              resizeMode='contain'
+            />  
+              :
+            <Image 
+              style={styles.profilePic} 
+              source={{uri:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}}
+              resizeMode='contain'/> }
             
             <View style={styles.containerDatos}>
             <Text style={styles.userName}> {this.state.userInfo[0].datos.userName} </Text>
@@ -164,11 +169,15 @@ const styles = StyleSheet.create({
   },
   deleteButton:{
     width:'100%',
-    height:30,
+    height:35,
     flexDirection:'row',
     backgroundColor: '#D9D6D6',
     alignItems:'center',
     justifyContent:'center',
+  },
+  coontainerFlecha:{
+    marginLeft:20,
+    marginRight: 20
   },
   post:{
     color:'grey',
@@ -206,7 +215,7 @@ const styles = StyleSheet.create({
   containerPost: {
     marginTop: 5,
     marginBottom: 5,
-    height: '70%'
+    height: '100%'
   },
   camera: {
     width: "100vw",

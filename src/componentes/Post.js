@@ -12,10 +12,8 @@ class Post extends Component {
         super(props)
         this.state={
             like: false,
-            comment: ""
-        }
-
-        
+            comments: [],
+        }        
     }
 
     componentDidMount(){
@@ -47,23 +45,15 @@ class Post extends Component {
     })
     .then(this.setState({like: false}))
    }
-   comment(texto){
-    db.collection("posts").doc(this.props.infoPost.id).update({
-        comments: firebase.firestore.FieldValue.arrayUnion({
-            owner: auth.currentUser.email,
-            comment: texto
-        })
-    })
-    .then(this.setState({comment: ""}))
-   }
 
-
+   
     render(){
         console.log(this.props.infoPost);
         return(
             <View style={styles.formContainer}>
              
                 {/* PERFIL */}
+                {this.props.infoPost.datos.owner != auth.currentUser.email ? 
                 <TouchableOpacity
                     onPress={ ()=> this.props.navigation.navigate('Profile', this.props.infoPost.datos.owner ) }
                     style={styles.container}
@@ -77,10 +67,25 @@ class Post extends Component {
                         style={styles.profilePic} 
                         source={{uri:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}}
                         resizeMode='contain'/> }
-
                     <Text style={styles.userName}>{this.props.infoPost.datos.userName}</Text>
                 </TouchableOpacity>
-                
+                :
+                <TouchableOpacity
+                    onPress={ ()=> this.props.navigation.navigate('MyProfile', this.props.infoPost.datos.owner ) }
+                    style={styles.container}
+                    >
+                    {this.props.infoPost.datos.profilePic != '' ?
+                    <Image 
+                        style={styles.profilePic} 
+                        source={{uri:this.props.infoPost.datos.profilePic}}
+                        resizeMode='contain'/> :
+                        <Image 
+                        style={styles.profilePic} 
+                        source={{uri:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}}
+                        resizeMode='contain'/> }
+                    <Text style={styles.userName}>{this.props.infoPost.datos.userName}</Text>
+                </TouchableOpacity> 
+                }
                 {/* FOTO DEL POSTEO */}
                 <Image style={styles.camera} source={{uri:this.props.infoPost.datos.photo }}/>
                 <View style={styles.contenedorLikes}>
@@ -113,15 +118,12 @@ class Post extends Component {
                     onPress={ ()=> this.props.navigation.navigate('MyProfile', this.props.infoPost.datos.owner)}>
                     <Text style={styles.nameDescription}>{this.props.infoPost.datos.userName} </Text>
                 </TouchableOpacity>
-               }  
-                {/* <TouchableOpacity
-                    onPress={ ()=> this.props.navigation.navigate('Profile', this.props.infoPost.datos.owner)}>
-                    <Text style={styles.nameDescription}>{this.props.infoPost.datos.userName} </Text>
-                </TouchableOpacity> */}
-                    <Text >{this.props.infoPost.datos.post}</Text>
+               } 
+                <Text >{this.props.infoPost.datos.post}</Text>
                    
                 </View>
                 <TouchableOpacity style={styles.commentCount}
+                    
                     onPress={ ()=> this.props.navigation.navigate('Comments', this.props.infoPost.datos.photo)}>
                      {this.props.infoPost.datos.comments.length== 1? 
                         <Text style={styles.texto}> {this.props.infoPost.datos.comments.length} comment</Text>
@@ -129,9 +131,13 @@ class Post extends Component {
                         <Text style={styles.texto}> {this.props.infoPost.datos.comments.length} comments</Text>
                     }  
                 </TouchableOpacity>
-               
-
-                <View style={styles.containerComment}>
+                <FlatList
+                    data= {this.props.infoPost}
+                    keyExtractor={ unPost => unPost.id }
+                    renderItem={ ({item}) => <Text> {item.datos.comments.comment}</Text>}
+                    
+                />
+                <TouchableOpacity style={styles.containerComment} onPress={ ()=> this.props.navigation.navigate('Comments', this.props.infoPost.datos.photo)}>
                 <TextInput
                         style={styles.inputComment}
                         onChangeText={(text) => this.setState({comment: text })}
@@ -139,10 +145,9 @@ class Post extends Component {
                         keyboardType="default"
                         value={this.state.comment}
                     />
-                <TouchableOpacity onPress={()=>this.comment(this.state.comment)}>
+                
                 <Feather name="send" size={24} color="black" />
                 </TouchableOpacity> 
-                </View>   
             </View>
         )
     }
@@ -245,9 +250,12 @@ const styles = StyleSheet.create({
         justifyContent: 'left'
       },
       inputComment: {
+        width: '90%',
+        justifyContent: 'space-around',
         height: 20,
         paddingVertical: 15,
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
+        marginRight: 5,
         borderRadius: 6,
         marginVertical: 10,
         backgroundColor:'#eae0ed'},
