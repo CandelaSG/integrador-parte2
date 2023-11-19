@@ -92,9 +92,7 @@ class Profile extends Component {
       })
       .then(() =>{
         db.collection('user').doc(id).delete()
-            .then(() => {
             this.props.navigation.navigate("Login")
-      })
       })
       .catch((error) => {
         console.log(error);

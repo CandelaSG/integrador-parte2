@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { TextInput, View, Text, FlatList, TouchableOpacity, StyleSheet , Image} from "react-native";
 
-import { db } from "../../firebase/config";
+import { auth, db } from "../../firebase/config";
 
 class Search extends Component {
   constructor(props) {
@@ -34,7 +34,12 @@ class Search extends Component {
 
 
   handleUserSelect(selectedUserId) {
-    this.props.navigation.navigate('Profile', selectedUserId );
+    {selectedUserId != auth.currentUser.email ? 
+      this.props.navigation.navigate('Profile', selectedUserId )
+      :
+      this.props.navigation.navigate('MyProfile', selectedUserId )
+    }
+    console.log(selectedUserId);
   }
 
   render() {
@@ -43,7 +48,7 @@ class Search extends Component {
     );
 
     console.log(filteredResults)
-
+    console.log(this.state.results);
     return (
       <View >
         <TextInput
