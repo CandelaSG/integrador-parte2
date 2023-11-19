@@ -8,6 +8,9 @@ import {
   FlatList,
   Image,
   ActivityIndicator,
+  Alert,
+  Modal,
+  Pressable
 } from "react-native";
 import { auth, db } from "../../firebase/config";
 import { FontAwesome } from '@expo/vector-icons';   
@@ -18,7 +21,9 @@ class Profile extends Component {
     super(props);
     this.state = {
       userInfo: [],
-      userPosts: []
+      userPosts: [],
+      modalVisible: false,
+      setModalVisible: false
     };
   }
   componentDidMount() {
@@ -58,12 +63,10 @@ class Profile extends Component {
         this.setState({
           userPosts: info
         })
-          ;
-      }
-    )
+      })
+
+
   }
-
-
   logout() {
     auth.signOut();
     this.props.navigation.navigate("Login");
@@ -72,17 +75,58 @@ class Profile extends Component {
   deletePost(id) {
     db.collection('posts').doc(id).delete()
       .then(() => {
-        console.log("Post eliminado")
+        this.setState({
+          setModalVisible: false,
+          modalVisible:false
+        })
       })
       .catch((error) => {
         console.log(error)
       })
   }
+   deleteUser(id){
+    const user = auth.currentUser;
+      user.delete()
+      .then(() => {
+            console.log('Usuario eliminado de auth');
+      })
+      .then(() =>{
+        db.collection('user').doc(id).delete()
+            .then(() => {
+            this.props.navigation.navigate("Login")
+      })
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  } 
+  changeModalVisible(){
+    {this.state.modalVisible === false ?
+      this.setState({
+        modalVisible: true
+      })
+        :
+    this.setState(
+      {
+        modalVisible: false
+      })
+    }
+  }
+  changesetModalVisible(){
+    {this.state.setModalVisible === false ?
+      this.setState({
+        setModalVisible: true
+      })
+        :
+    this.setState(
+      {
+        setModalVisible: false
+      })
+    }
+  }
 
   render() {
-    console.log(auth.currentUser.email);
     return (
-      
       <View style={styles.formContainer}>
       <TouchableOpacity
           onPress={() => this.props.navigation.navigate("Menu")}
@@ -118,6 +162,12 @@ class Profile extends Component {
               <TouchableOpacity  onPress={() => this.logout()}>
               <Text style={styles.botonLogout}>Logout</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity  onPress={() => this.deleteUser(this.state.userInfo[0].id)}>
+              <Text style={styles.botonLogout}>Delete user</Text>
+              </TouchableOpacity>
+              
+
             </View>
             
           </View>
@@ -132,14 +182,36 @@ class Profile extends Component {
 
                   <View style={styles.containerPost}>
                     <Image style={styles.camera} source={{ uri: item.datos.photo }} />
-                    
-                    <TouchableOpacity style={styles.deleteButton} onPress={() => this.deletePost(item.id)}>
-                      
-                      <FontAwesome style={styles.dislike}  name='trash' size={15}/>
-                      <Text style={styles.deleteText} >Delete post</Text>
-                      
-                    </TouchableOpacity>
 
+                    <View style={styles.centeredView}>
+                      <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {Alert.alert('Modal has been closed.');this.changeModalVisible() }}>
+                        <View style={styles.centeredView}>
+
+                          <View style={styles.modalView}>
+                          <Text style={styles.textDelete}> You sure u wanna delete this post? </Text>
+
+                          <TouchableOpacity style={[styles.button]} onPress={() => this.deletePost(item.id)}>
+                          <Text style={styles.textStyle}>Delete</Text>
+                          </TouchableOpacity>
+                            <Pressable
+                              style={[styles.button, styles.buttonClose]}
+                              onPress={() => this.changeModalVisible()}>
+                              <Text style={styles.textStyle}>Cancell</Text>
+                            </Pressable>
+                          </View>
+                        </View>
+                      </Modal>
+                      <Pressable
+                        style={[styles.deleteButton]}
+                        onPress={() => this.changeModalVisible()}>
+                          <FontAwesome style={styles.dislike}  name='trash' size={15}/>
+                          <Text style={styles.deleteText} >Delete post</Text>
+                      </Pressable>
+                    </View>
                   </View>)
               }}
               />}
@@ -230,6 +302,52 @@ const styles = StyleSheet.create({
     width:70,
     borderRadius:45,
     marginRight:10
+},
+textDelete:{
+    marginBottom: 7
+},
+centeredView: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+modalView: {
+  margin: 20,
+  backgroundColor: 'white',
+  borderRadius: 20,
+  padding: 30,
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+},
+button: {
+  borderRadius: 20,
+  padding: 10,
+  elevation: 2,
+  backgroundColor: '#A9A9A8',
+},
+buttonOpen: {
+  backgroundColor: '#D9D6D6',
+},
+buttonClose: {
+  backgroundColor: 'red',
+  marginTop: 5
+},
+textStyle: {
+  color: 'white',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  paddingHorizontal: 15
+},
+modalText: {
+  marginBottom: 15,
+  textAlign: 'center',
 },
 });
 

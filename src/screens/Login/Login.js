@@ -59,7 +59,6 @@ class Login extends Component {
       <>
        <Text style={styles.title}> Login</Text>
         
-       {/* EMAIL */}
        <TextInput
          style={styles.input}
          onChangeText={(text) => this.setState({ email: text })}
@@ -67,8 +66,6 @@ class Login extends Component {
          keyboardType="email-address"
          value={this.state.email}
        />
-
-       {/* PASSWORD */}
        <TextInput
          style={styles.input}
          onChangeText={(text) => this.setState({ password: text })}

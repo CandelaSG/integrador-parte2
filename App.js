@@ -50,7 +50,7 @@ export default function App() {
               name="MyProfile" 
               component={Profile}  
               options={{ headerShown: false }}
-            />
+          />
       </Stack.Navigator>
     </NavigationContainer>
   );

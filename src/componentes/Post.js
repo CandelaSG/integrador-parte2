@@ -12,7 +12,7 @@ class Post extends Component {
         super(props)
         this.state={
             like: false,
-            comments: [],
+            lastComments: (this.props.infoPost.datos.comments || []).slice(-4)
         }        
     }
 
@@ -29,6 +29,10 @@ class Post extends Component {
                 this.setState({ like: true })
             }})
         }
+
+/*         const allComments = this.props.infoPost.datos.comments || [];
+        const lastComments = allComments.slice(-4);
+        this.setState({lastComments}) */
     }
 
 
@@ -49,6 +53,7 @@ class Post extends Component {
    
     render(){
         console.log(this.props.infoPost);
+        console.log(this.state.lastComments);
         return(
             <View style={styles.formContainer}>
              
@@ -126,17 +131,20 @@ class Post extends Component {
                     
                     onPress={ ()=> this.props.navigation.navigate('Comments', this.props.infoPost.datos.photo)}>
                      {this.props.infoPost.datos.comments.length== 1? 
-                        <Text style={styles.texto}> {this.props.infoPost.datos.comments.length} comment</Text>
+                        <Text style={styles.texto}> View {this.props.infoPost.datos.comments.length} comment</Text>
                         :
-                        <Text style={styles.texto}> {this.props.infoPost.datos.comments.length} comments</Text>
+                        <Text style={styles.texto}> View all {this.props.infoPost.datos.comments.length} comments</Text>
                     }  
                 </TouchableOpacity>
-                <FlatList
-                    data= {this.props.infoPost}
-                    keyExtractor={ unPost => unPost.id }
-                    renderItem={ ({item}) => <Text> {item.datos.comments.comment}</Text>}
+
+                <FlatList style= {styles.commentList}
+                    data= {this.state.lastComments}
+                    keyExtractor={ unPost =>  this.props.infoPost.id}
+                    renderItem={ ({item}) => <View style= {styles.commentContainer}> <Text style= {styles.nameDescription}> {item.userName}</Text> <Text style= {styles.comment}>{item.comment}</Text> </View>}
                     
                 />
+                
+               
                 <TouchableOpacity style={styles.containerComment} onPress={ ()=> this.props.navigation.navigate('Comments', this.props.infoPost.datos.photo)}>
                 <TextInput
                         style={styles.inputComment}
@@ -147,7 +155,7 @@ class Post extends Component {
                     />
                 
                 <Feather name="send" size={24} color="black" />
-                </TouchableOpacity> 
+                </TouchableOpacity>  
             </View>
         )
     }
@@ -156,8 +164,7 @@ class Post extends Component {
 const styles = StyleSheet.create({
     formContainer: {
       marginTop: 30,
-      height: 500
-      
+      height: 750,
     },
     dislike:{
         color: 'red'
@@ -223,6 +230,9 @@ const styles = StyleSheet.create({
     textButton: {
       color: "#fff",
     },
+    comment: {
+        paddingLeft: 4
+    },
     image: {
         height: 400,
       },
@@ -258,7 +268,16 @@ const styles = StyleSheet.create({
         marginRight: 5,
         borderRadius: 6,
         marginVertical: 10,
-        backgroundColor:'#eae0ed'},
+        backgroundColor:'#eae0ed'
+    },
+    commentContainer:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent: 'left',
+        marginLeft:10,
+        marginBottom:1,
+        alignItems: 'center'
+    }
       });
 
 

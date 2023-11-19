@@ -39,7 +39,6 @@ componentDidMount(){
                    datos: i.data()
                  })
              })
-
              this.setState({
                  userInfo: info
              })
