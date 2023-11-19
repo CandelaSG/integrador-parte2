@@ -9,6 +9,7 @@ import Menu from "./src/componentes/Menu";
 import Comments from "./src/screens/Comments/Comments";
 import ProfileUsers from "./src/screens/ProfileUsers/profileUsers";
 import Profile from "./src/screens/Profile/Profile";
+import EditProfile from './src/screens/EditProfile/EditProfile'
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,11 @@ export default function App() {
         <Stack.Screen 
               name="MyProfile" 
               component={Profile}  
+              options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+              name="EditProfile" 
+              component={EditProfile}  
               options={{ headerShown: false }}
           />
       </Stack.Navigator>

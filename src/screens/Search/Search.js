@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { TextInput, View, Text, FlatList, TouchableOpacity, StyleSheet , Image} from "react-native";
 
-import { auth, db } from "../../firebase/config";
+import { db } from "../../firebase/config";
 
 class Search extends Component {
   constructor(props) {
@@ -34,12 +34,10 @@ class Search extends Component {
 
 
   handleUserSelect(selectedUserId) {
-
     this.props.navigation.navigate('Profile', selectedUserId );
   }
 
   render() {
-
     const filteredResults = this.state.results.filter((user) =>
       user.datos.userName.toLowerCase().includes(this.state.search.toLowerCase())
     );

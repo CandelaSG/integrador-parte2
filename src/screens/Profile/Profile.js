@@ -125,12 +125,14 @@ class Profile extends Component {
     }
   }
 
+
+
   render() {
     return (
       <View style={styles.formContainer}>
-      <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Menu")}
-          style={styles.coontainerFlecha}>
+        <TouchableOpacity
+         onPress={() => this.props.navigation.navigate("Home")}
+         style={styles.coontainerFlecha}>
          <FontAwesome style={styles.flecha} name="arrow-left" size='large'/>
        </TouchableOpacity>
   
@@ -166,6 +168,10 @@ class Profile extends Component {
               <TouchableOpacity  onPress={() => this.deleteUser(this.state.userInfo[0].id)}>
               <Text style={styles.botonLogout}>Delete user</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity  onPress={() => this.props.navigation.navigate("EditProfile")}>
+              <Text style={styles.botonEdit}>Edit profile</Text>
+              </TouchableOpacity>
               
 
             </View>
@@ -192,7 +198,7 @@ class Profile extends Component {
                         <View style={styles.centeredView}>
 
                           <View style={styles.modalView}>
-                          <Text style={styles.textDelete}> You sure u wanna delete this post? </Text>
+                          <Text style={styles.textDelete}> Are you sure you want to delete this post? </Text>
 
                           <TouchableOpacity style={[styles.button]} onPress={() => this.deletePost(item.id)}>
                           <Text style={styles.textStyle}>Delete</Text>
@@ -200,7 +206,7 @@ class Profile extends Component {
                             <Pressable
                               style={[styles.button, styles.buttonClose]}
                               onPress={() => this.changeModalVisible()}>
-                              <Text style={styles.textStyle}>Cancell</Text>
+                              <Text style={styles.textStyle}>Cancel</Text>
                             </Pressable>
                           </View>
                         </View>
@@ -256,6 +262,10 @@ const styles = StyleSheet.create({
   },
   botonLogout:{
     color: "#ec5853",
+    fontWeight:'bold',
+  },
+  botonEdit:{
+    color: "grey",
     fontWeight:'bold',
   },
   activityIndicatorContainer:{
