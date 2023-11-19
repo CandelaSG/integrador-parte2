@@ -20,7 +20,6 @@ class EditProfile extends Component {
         this.state = {
             commentedPic: null,
             userInfo: [],
-            email: '',
             userName: '',
             miniBio: '',
             profilePic: '',
@@ -42,10 +41,25 @@ class EditProfile extends Component {
                     })
 
                     this.setState({
-                        userInfo: info
+                        userInfo: info,
+                        userName: info[0].datos.userName,
+                        profilePic: info[0].datos.profilePic,
+                        miniBio: info[0].datos.miniBio
                     })
                 })
     }
+
+    editUser(){
+        db.collection("user").doc(this.state.userInfo[0].id).update({
+              userName: this.state.userName,
+              profilePic: this.state.profilePic,
+              miniBio: this.state.miniBio
+
+            })
+            .then((response) => {
+                this.props.navigation.navigate("MyProfile");
+              })
+        }
 
     render() {
         console.log(this.state.userInfo);
@@ -58,22 +72,12 @@ class EditProfile extends Component {
                             style={styles.coontainerFlecha}>
                             <FontAwesome style={styles.flecha} name="arrow-left" size='large' />
                         </TouchableOpacity>
-                        {/* EMAIL */}
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => this.setState({ email: text })}
-                            placeholder={this.state.userInfo[0].datos.owner}
-                            keyboardType='email-address'
-                            value={this.state.userInfo.owner}
-                        />
-
                         {/* USER NAME */}
                         <TextInput
                             style={styles.input}
                             onChangeText={(text) => this.setState({ userName: text })}
-                            placeholder={this.state.userInfo[0].datos.userName}
                             keyboardType='default'
-                            value={this.state.userInfo.userName}
+                            value={this.state.userName}
                         />
 
                         {/* MINI BIO */}
@@ -82,7 +86,7 @@ class EditProfile extends Component {
                             onChangeText={(bio) => this.setState({ miniBio: bio })}
                             placeholder='miniBio'
                             keyboardType='default'
-                            value={this.state.userInfo.miniBio}
+                            value={this.state.miniBio}
                         />
 
                         {/* PROFILE PICTURE */}
@@ -91,14 +95,14 @@ class EditProfile extends Component {
                             onChangeText={(url) => this.setState({ profilePic: url })}
                             placeholder='Add the URL of your profile picture'
                             keyboardType='default'
-                            value={this.state.userInfo[0].datos.profilePic}
+                            value={this.state.profilePic}
                         />
                     </>
                     : <View style={styles.activityIndicatorContainer}>
                         <ActivityIndicator size='small' color='purple' />
                     </View>
                 }
-                <TouchableOpacity style={styles.button} onPress={() => this.setState()}> {/* MODIFICAR ACÁ */}
+                <TouchableOpacity style={styles.button} onPress={() => this.editUser()}> 
                     <Text style={styles.textButton} > Modify</Text>
                 </TouchableOpacity>
             </View>

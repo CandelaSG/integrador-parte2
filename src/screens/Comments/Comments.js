@@ -97,8 +97,27 @@ class Comments extends Component {
               renderItem={({ item }) => {
                 return (
                   <View style={styles.description}>
-                    <TouchableOpacity style={styles.user}
-                      onPress={() => this.props.navigation.navigate('Profile', item.owner)}>
+                    {item.owner != auth.currentUser.email ?
+                        <TouchableOpacity style={styles.user}
+                        onPress={() => this.props.navigation.navigate('Profile', item.owner)}>
+                        {item.profilePic != '' ?
+                          <Image
+                            style={styles.profilePic}
+                            source={{ uri: item.profilePic }}
+                            resizeMode='contain' />
+                          :
+                          <Image
+                            style={styles.profilePic}
+                            source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }}
+                            resizeMode='contain' />
+                        }
+  
+                        <Text style={styles.nameDescription}>{item.userName} </Text>
+                        <Text style={styles.comment}>{item.comment}</Text>
+                      </TouchableOpacity>
+                  :
+                      <TouchableOpacity style={styles.user}
+                      onPress={() => this.props.navigation.navigate('MyProfile', item.owner)}>
                       {item.profilePic != '' ?
                         <Image
                           style={styles.profilePic}
@@ -114,6 +133,8 @@ class Comments extends Component {
                       <Text style={styles.nameDescription}>{item.userName} </Text>
                       <Text style={styles.comment}>{item.comment}</Text>
                     </TouchableOpacity>
+                  }
+
 
 
                   </View>
