@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet, FlatList, Image } from 'react-native';
 import { auth, db } from '../firebase/config';
 import firebase from 'firebase';
-import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faCoffee, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 class Post extends Component {
     constructor(props) {
@@ -170,7 +167,7 @@ const styles = StyleSheet.create({
     formContainer: {
         marginTop: 5,
         height: 500,
-        marginBottom:15,
+        marginBottom: 15,
     },
     dislike: {
         color: 'red'
@@ -202,7 +199,7 @@ const styles = StyleSheet.create({
     textoComment: {
         color: 'grey',
         paddingLeft: 10,
-        marginTop:5,
+        marginTop: 5,
     },
     userName: {
         paddingTop: 10,

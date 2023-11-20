@@ -82,7 +82,7 @@ class Comments extends Component {
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("Menu" )}
+            onPress={() => this.props.navigation.navigate("Menu")}
             style={styles.coontainerFlecha}>
             <FontAwesome style={styles.flecha} name="arrow-left" size='large' />
           </TouchableOpacity>
@@ -98,7 +98,7 @@ class Comments extends Component {
                 return (
                   <View style={styles.description}>
                     {item.owner != auth.currentUser.email ?
-                        <TouchableOpacity style={styles.user}
+                      <TouchableOpacity style={styles.user}
                         onPress={() => this.props.navigation.navigate('Profile', item.owner)}>
                         {item.profilePic != '' ?
                           <Image
@@ -111,29 +111,29 @@ class Comments extends Component {
                             source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }}
                             resizeMode='contain' />
                         }
-  
+
                         <Text style={styles.nameDescription}>{item.userName} </Text>
                         <Text style={styles.comment}>{item.comment}</Text>
                       </TouchableOpacity>
-                  :
+                      :
                       <TouchableOpacity style={styles.user}
-                      onPress={() => this.props.navigation.navigate('MyProfile', item.owner)}>
-                      {item.profilePic != '' ?
-                        <Image
-                          style={styles.profilePic}
-                          source={{ uri: item.profilePic }}
-                          resizeMode='contain' />
-                        :
-                        <Image
-                          style={styles.profilePic}
-                          source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }}
-                          resizeMode='contain' />
-                      }
+                        onPress={() => this.props.navigation.navigate('MyProfile', item.owner)}>
+                        {item.profilePic != '' ?
+                          <Image
+                            style={styles.profilePic}
+                            source={{ uri: item.profilePic }}
+                            resizeMode='contain' />
+                          :
+                          <Image
+                            style={styles.profilePic}
+                            source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }}
+                            resizeMode='contain' />
+                        }
 
-                      <Text style={styles.nameDescription}>{item.userName} </Text>
-                      <Text style={styles.comment}>{item.comment}</Text>
-                    </TouchableOpacity>
-                  }
+                        <Text style={styles.nameDescription}>{item.userName} </Text>
+                        <Text style={styles.comment}>{item.comment}</Text>
+                      </TouchableOpacity>
+                    }
 
 
 
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignContent: "flex-end",
     backgroundColor: '#eae0ed',
-    borderRadius:10,
+    borderRadius: 10,
   },
   inputComment: {
     width: '90%',

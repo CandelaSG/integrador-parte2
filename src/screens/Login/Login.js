@@ -14,7 +14,7 @@ class Login extends Component {
   constructor() {
     super();
     this.state = {
-      logueado:false,
+      logueado: false,
       email: "",
       password: "",
       textError: "",
@@ -39,15 +39,16 @@ class Login extends Component {
         this.props.navigation.navigate("Menu");
       })
       .catch((error) => {
-        if (error.code == 'auth/internal-error'){
+        if (error.code == 'auth/internal-error') {
           this.setState({
             textError: "Check your email or password"
           })
         }
         else {
-        this.setState({
-          textError: error.message
-      })}
+          this.setState({
+            textError: error.message
+          })
+        }
         console.log(error);
       });
   }
@@ -55,62 +56,62 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.formContainer}>
-       {this.state.logueado == true ?
-      <>
-       <Text style={styles.title}> Login</Text>
-        
-       <TextInput
-         style={styles.input}
-         onChangeText={(text) => this.setState({ email: text })}
-         placeholder="example@email.com"
-         keyboardType="email-address"
-         value={this.state.email}
-       />
-       <TextInput
-         style={styles.input}
-         onChangeText={(text) => this.setState({ password: text })}
-         placeholder="Password"
-         keyboardType="default"
-         secureTextEntry={true}
-         value={this.state.password}
-       />
-       
-       {this.state.email.length > 0 && this.state.password.length > 0 ? 
+        {this.state.logueado == true ?
+          <>
+            <Text style={styles.title}> Login</Text>
 
-       <TouchableOpacity
-         style={styles.button}
-         onPress={() => this.login(this.state.email, this.state.password)}>
-         <Text style={styles.textButton}>Login</Text>
-       </TouchableOpacity> :
-       <TouchableOpacity style={styles.buttonError} onPress={()=> this.setState({textError: 'You must complete the required fields'})}>
-       <Text style={styles.textButton} > Login</Text>    
-       </TouchableOpacity> }  
-       {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false }
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => this.setState({ email: text })}
+              placeholder="example@email.com"
+              keyboardType="email-address"
+              value={this.state.email}
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => this.setState({ password: text })}
+              placeholder="Password"
+              keyboardType="default"
+              secureTextEntry={true}
+              value={this.state.password}
+            />
 
-       <TouchableOpacity
-         onPress={() => this.props.navigation.navigate("Register")}
-         style={styles.register}>
-         <Text>Don't have an account? Register.</Text>
-       </TouchableOpacity>
-       </>
-       : 
-        <View style={styles.activityIndicatorContainer}>
-            <ActivityIndicator  size='small' color='purple' />
-        </View>
-       }
-        
+            {this.state.email.length > 0 && this.state.password.length > 0 ?
+
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => this.login(this.state.email, this.state.password)}>
+                <Text style={styles.textButton}>Login</Text>
+              </TouchableOpacity> :
+              <TouchableOpacity style={styles.buttonError} onPress={() => this.setState({ textError: 'You must complete the required fields' })}>
+                <Text style={styles.textButton} > Login</Text>
+              </TouchableOpacity>}
+            {this.state.textError.length > 0 ? <Text style={styles.textError}> {this.state.textError} </Text> : false}
+
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate("Register")}
+              style={styles.register}>
+              <Text>Don't have an account? Register.</Text>
+            </TouchableOpacity>
+          </>
+          :
+          <View style={styles.activityIndicatorContainer}>
+            <ActivityIndicator size='small' color='purple' />
+          </View>
+        }
+
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  activityIndicatorContainer:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center',
+  activityIndicatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  title:{
+  title: {
     fontWeight: 'bold',
     color: '#896a92',
   },
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   input: {
-    backgroundColor:'#eae0ed',
+    backgroundColor: '#eae0ed',
     height: 20,
     paddingVertical: 15,
     paddingHorizontal: 10,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   button: {
-    flex:1,
+    flex: 1,
     alignItems: 'center',
     backgroundColor: '#6c4e75',
     paddingHorizontal: 10,
@@ -135,25 +136,25 @@ const styles = StyleSheet.create({
     borderRadius: 4,
 
   },
-  buttonError:{
-    flex:1,
+  buttonError: {
+    flex: 1,
     alignItems: 'center',
-    backgroundColor:'#896a92',
+    backgroundColor: '#896a92',
     paddingHorizontal: 10,
     paddingVertical: 6,
     textAlign: 'center',
-    borderRadius:4, 
+    borderRadius: 4,
     color: 'white'
-},
+  },
   textButton: {
     color: "#fff",
   },
-  textError:{
-    color:'red'
-},
-register:{
-  marginTop: 10
-}
+  textError: {
+    color: 'red'
+  },
+  register: {
+    marginTop: 10
+  }
 });
 
 export default Login;

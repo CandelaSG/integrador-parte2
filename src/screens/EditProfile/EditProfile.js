@@ -8,8 +8,6 @@ import {
     ActivityIndicator
 } from "react-native";
 
-import firebase from 'firebase';
-import { Feather } from '@expo/vector-icons';
 import { auth, db } from "../../firebase/config";
 import { FontAwesome } from '@expo/vector-icons';
 

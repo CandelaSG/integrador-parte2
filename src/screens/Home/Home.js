@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import {
-  TextInput,
-  TouchableOpacity,
   View,
-  Text,
   StyleSheet,
-  FlatList ,
+  FlatList,
   Image,
   ActivityIndicator
 } from "react-native";
@@ -13,62 +10,60 @@ import Post from "../../componentes/Post";
 
 import { auth, db } from "../../firebase/config";
 
-
-
 class Home extends Component {
   constructor() {
     super();
-    this.state = {listaPost: []};
+    this.state = { listaPost: [] };
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
-    db.collection('posts').orderBy('createdAt' , 'desc').onSnapshot(
-        posteos => {
-            let postsAMostrar = [];
+    db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(
+      posteos => {
+        let postsAMostrar = [];
 
-            posteos.forEach( unPost => {
-                postsAMostrar.push(
-                    {
-                        id: unPost.id,
-                        datos: unPost.data()
-                    }
-                )
-            })
+        posteos.forEach(unPost => {
+          postsAMostrar.push(
+            {
+              id: unPost.id,
+              datos: unPost.data()
+            }
+          )
+        })
 
-            this.setState({
-                listaPost: postsAMostrar
-            })
-        }
+        this.setState({
+          listaPost: postsAMostrar
+        })
+      }
     )
-}
+  }
 
 
   render() {
     console.log(this.state.listaPost);
     return (
       <View style={styles.container}>
-        
-                {
-                    this.state.listaPost.length === 0 
-                    ?
-                    <View style={styles.activityIndicatorContainer}>
-                      <ActivityIndicator  size='small' color='purple' />
-                    </View>
-                    :
-                    <>
-                    <View style={styles.containerLogo}>
-                        <Image style={styles.logo} 
-                        source={require('../../../assets/LOGO.png')}
-                        resizeMode='contain'/>
-                        </View>
-                    <FlatList 
-                        data= {this.state.listaPost}
-                        keyExtractor={ unPost => unPost.id }
-                        renderItem={ ({item}) => <Post infoPost = { item } navigation={this.props.navigation} /> }
-                    />
-                    </>
-                }
+
+        {
+          this.state.listaPost.length === 0
+            ?
+            <View style={styles.activityIndicatorContainer}>
+              <ActivityIndicator size='small' color='purple' />
+            </View>
+            :
+            <>
+              <View style={styles.containerLogo}>
+                <Image style={styles.logo}
+                  source={require('../../../assets/LOGO.png')}
+                  resizeMode='contain' />
+              </View>
+              <FlatList
+                data={this.state.listaPost}
+                keyExtractor={unPost => unPost.id}
+                renderItem={({ item }) => <Post infoPost={item} navigation={this.props.navigation} />}
+              />
+            </>
+        }
 
       </View>
     );
@@ -84,17 +79,17 @@ const styles = StyleSheet.create({
   image: {
     height: 400,
   },
-  containerLogo:{
-    paddingTop:20,
-    paddingBottom:10,
+  containerLogo: {
+    paddingTop: 20,
+    paddingBottom: 10,
   },
-  logo:{
-    height:20
+  logo: {
+    height: 20
   },
-  activityIndicatorContainer:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center',
+  activityIndicatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
